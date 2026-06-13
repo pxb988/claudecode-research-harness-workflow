@@ -29,18 +29,27 @@
 
 ## 快速上手
 
-**前置：** Claude Code、git，以及你研究实际使用的分析语言运行时——**R / Stata / Python 任一**（主流程未指定语言时默认 R）。**论文复现模式**额外需要 Python（含读取 `.dta` 的依赖）。
+> 第一次用、社科背景、不是程序员？跟着下面三步走即可；想要带完整例子的逐步详解，看 **[入门指南](docs/入门指南.md)**。
+
+**前置（开始前确认）：**
+- **Claude Code** 与 **git** 已就绪，且你会打开 Claude Code 并和它对话。
+- 装好一种**分析语言运行时**——**R / Stata / Python 任一**即可（主流程未指定语言时默认 R）。**论文复现模式**额外需要 Python（含读取 `.dta` 的依赖）。不确定怎么装？[入门指南的「前置检查」](docs/入门指南.md#0-这份指南给谁--你需要先准备什么)附了官方下载链接。
 
 ### Step 1 · 安装插件（项目级）
 
-在你的**研究项目目录**（不是本仓库）启动 Claude Code：
+「项目目录」= 你**这个研究项目的文件夹**（不是本插件仓库）。先 `cd` 进去，在那里启动 Claude Code，再输入下面两行：
 
 ```text
 /plugin marketplace add pxb988/claudecode-research-harness-workflow
 /plugin install claudecode-research-harness-workflow
 ```
 
-安装后，9 个技能（8 个 `/research-harness-*` 功能技能 + `/workflow-guide` 导航）即可在该项目使用。要让协作者克隆即得，把 `enabledPlugins` + `extraKnownMarketplaces` 写进项目 `.claude/settings.json` 并提交。
+- 第一行：把本插件的「市场」地址告诉 Claude Code。
+- 第二行：从该市场安装插件到当前项目。
+
+**怎么确认装好了：** 开始输入 `/research-harness` 时，应能看到 9 个技能(8 个 `/research-harness-*` 功能技能 + `/workflow-guide` 导航)被提示出来。若没看到，多半是没在本项目启用——见[常见问题](docs/入门指南.md#7-常见问题--出错怎么办)。
+
+> 想让协作者克隆仓库即得插件：把 `enabledPlugins` + `extraKnownMarketplaces` 写进项目 `.claude/settings.json` 并提交。
 
 ### Step 2 · 初始化并开工
 
@@ -48,7 +57,9 @@
 /research-harness-setup
 ```
 
-它会生成 canonical 布局、项目治理 `CLAUDE.md`、数据保护 `.gitignore` 与权限，并在原始数据放入 `1.rawdata/` 后为其施加 OS 只读锁。
+它会生成 canonical 布局（标准文件夹结构）、项目治理 `CLAUDE.md`、数据保护 `.gitignore` 与权限，并在原始数据放入 `1.rawdata/` 后为其施加 OS 只读锁。
+
+**怎么确认成功：** 项目里出现 `0.dofiles/`、`1.rawdata/`、`2.workdata/`、`3.outdata/`、`4.reports/` 等目录，以及 `study_spec.md`、`analysis_plan.md`。之后按 `audit → clean → plan → work → review → release` 顺序推进即可（每阶段详解见[入门指南](docs/入门指南.md#3-手把手跑完一个完整项目主线)）。
 
 > **不确定该用哪个技能？运行 `/workflow-guide`。**
 
