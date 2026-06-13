@@ -12,7 +12,7 @@ This file governs work **on the plugin itself**.
 - `agents/` — `analyst`, `reviewer`. Auto-discovered.
 - `hooks/` — node guardrails (`guard-raw-data`, `guard-git-add`, `remind-evidence`) + `hooks.json` + `test/`.
 - `templates/` — research report templates + `project/` (governance files delivered to user projects).
-- `docs/` — `adr/`, `references/` (datasets + replications knowledge), `survey-pipeline-engineering.md`, `INTEGRITY-RULES.md`, `RESEARCH-WORKFLOW.md`.
+- `docs/` — `adr/`, `references/` (datasets + replications knowledge), `survey-pipeline-engineering.md`, `INTEGRITY-RULES.md`, `RESEARCH-WORKFLOW.md`, `入门指南.md` (Chinese hands-on getting-started for non-CS users).
 - `examples/` — synthetic, de-identified demo fixtures in canonical layout (see `examples/FIXTURES.json`).
 - `output-styles/`, `CONTEXT.md`, `README.md`.
 
