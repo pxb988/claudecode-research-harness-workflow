@@ -2,31 +2,14 @@
 
 # Claude Code Research Harness Workflow
 
-> **面向 Agent 辅助实证研究的受控执行框架。**  
-> 把 Claude Code 从会写代码的智能体，变成可审计、可复现的研究协作者。
+> **面向 Agent 辅助实证研究的受控执行框架。**
+> 在可审计、可复现的流程里走完实证研究全程——审查原始数据 → 清洗合并 → 构造指标 → 分析 → 审阅 → 复制包，每一步强制留下证据。
 
-**作者：** 朱 晨 | 遗传社科研究 Chen Zhu | China Agricultural University (CAU)
-
-**最后更新：** 2026-06-13
+**作者：** 朱 晨 \| 遗传社科研究 Chen Zhu \| China Agricultural University (CAU)　·　**最后更新：** 2026-06-13
 
 <p align="center">
-  <strong>Specify → Audit → Clean → Plan → Work → Review → Release</strong><br>
+  <strong>Setup → Audit → Clean → Plan → Work → Review → Release</strong><br>
   <strong>定义问题 → 审查数据 → 清洗合并 → 制定计划 → 执行分析 → 审阅结果 → 发布复制包</strong>
-</p>
-
-<p align="center">
-  <code>/research-harness-setup</code> ·
-  <code>/research-harness-audit</code> ·
-  <code>/research-harness-clean</code> ·
-  <code>/research-harness-plan</code> ·
-  <code>/research-harness-work</code> ·
-  <code>/research-harness-review</code> ·
-  <code>/research-harness-release</code>
-</p>
-
-<p align="center">
-  <strong>+ 按论文定义提取分析就绪子样本</strong><br>
-  <em>给定任意已发表论文，从原始调查面板中提取与论文样本筛选、变量构造和编码一致的子样本及 codebook</em>
 </p>
 
 <p align="center">
@@ -36,395 +19,133 @@
   <img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey">
 </p>
 
----
+> **No script, no log, no claim. — 没有脚本，没有日志，就没有结论。**
 
-## 这是什么？
-
-**Claude Code Research Harness** 是一个面向 Claude Code 的实证研究执行框架。
-
-它不是一组 prompt，也不是一个普通 workflow，而是一个 **Harness**：一套由规则、文件、检查点和证据要求组成的受控研究环境。它把 AI 智能体约束在可复现、可审计、可追踪的研究流程中。
-
-普通用法是直接问智能体：
-
-> “帮我分析这个数据。”
-
-Claude Code Research Harness 的用法是让智能体在制度化环境里工作：
-
-> “只读审查原始数据，不要修改。  
-> 先生成清洗计划。  
-> 再写可复现脚本。  
-> 保存日志。  
-> 核验每一个数字。  
-> 一旦证据链断裂，就停止。”
-
-核心规则很简单：
-
-> **No script, no log, no claim.**  
-> **没有脚本，没有日志，就没有结论。**
+软件 Harness 约束 Agent 写代码，追求"代码通过测试"；**Research Harness 约束 Agent 做研究，追求"结论经得起追溯"**。这是一个投入均衡的完整七阶段实证研究 Harness——数据清洗与指标生成是其中扎实的核心支柱，论文复现是主流程之外的独立模式。
 
 ---
-## 快速上手指南
 
-前置：已安装 Claude Code、Python 3（或 Miniconda）、git。
+## 快速上手
 
-### Step 1. 安装插件（项目级）
+**前置：** Claude Code、git，以及你研究实际使用的分析语言运行时——**R / Stata / Python 任一**（主流程未指定语言时默认 R）。**论文复现模式**额外需要 Python（含读取 `.dta` 的依赖）。
 
-在你的**研究项目目录**（不是本仓库）里启动 Claude Code，然后：
+### Step 1 · 安装插件（项目级）
+
+在你的**研究项目目录**（不是本仓库）启动 Claude Code：
 
 ```text
 /plugin marketplace add pxb988/claudecode-research-harness-workflow
 /plugin install claudecode-research-harness-workflow
 ```
 
-安装后，8 个 `/research-harness-*` 技能即可在该项目使用。要让协作者克隆即得，可把
-`enabledPlugins` + `extraKnownMarketplaces` 写进项目的 `.claude/settings.json` 并提交。
+安装后，9 个技能（8 个 `/research-harness-*` 功能技能 + `/workflow-guide` 导航）即可在该项目使用。要让协作者克隆即得，把 `enabledPlugins` + `extraKnownMarketplaces` 写进项目 `.claude/settings.json` 并提交。
 
-### Step 2. 初始化并开工
+### Step 2 · 初始化并开工
 
 ```text
 /research-harness-setup
 ```
 
-它会生成 canonical 布局（`0.dofiles/ 1.rawdata/ 2.workdata/ 3.outdata/ 4.reports/`）、
-项目治理 `CLAUDE.md`、数据保护 `.gitignore` 与权限，并在原始数据放入 `1.rawdata/` 后
-对其上 OS 只读锁。随后按 `/workflow-guide` 的指引逐阶段推进。
+它会生成 canonical 布局、项目治理 `CLAUDE.md`、数据保护 `.gitignore` 与权限，并在原始数据放入 `1.rawdata/` 后为其施加 OS 只读锁。
 
-> 不确定该用哪个技能？运行 `/workflow-guide`。
+> **不确定该用哪个技能？运行 `/workflow-guide`。**
 
----
-
-## 实证研究中的 Harness 和软件开发中的 Harness 有什么不同？
-
-在软件开发和所谓 **Vibe coding** 语境中，Harness 通常指的是把 AI 编程智能体约束在一套工程化流程里：先写需求规格，再拆分任务，再修改代码，再运行测试，最后通过 review 和 release 检查。它解决的是一个核心问题：**不要让 Agent 只是凭感觉写代码，而要让每一次修改都能被测试、回滚和验收。**
-
-Claude Code Research Harness 继承了这个思想，但把对象从“软件代码”换成了“实证研究”。在研究场景里，真正危险的往往不是代码语法错误，而是样本构造不透明、数据清洗不可追溯、合并键错误、回归结果无法复现、因果表述超过识别设计、以及正文数字找不到对应日志。因此，Research Harness 不是只要求 Agent “代码能跑”，而是要求它证明：
-
-- 原始数据没有被修改；
-- 清洗和合并过程有脚本、有日志、有报告；
-- 样本限制、变量构造和模型设定与研究规格说明一致；
-- 每一个表格、图形和关键数字都能追溯到可运行脚本；
-- 每一个因果声明都经过识别策略审查；
-- 如果数据或设计不支持某个结论，Agent 必须停止，而不是编造一个看似合理的结果。
-
-因此，软件开发中的 Harness 更像是 **Coding Harness**：它关心代码变更、测试通过和 release readiness。Claude Code Research Harness 则是 **Research Harness**：它关心研究问题、数据来源、样本构造、识别可信度、结果复现和证据链完整性。
-
-它与 Vibe Research 的关系也类似。Vibe research 强调用自然语言驱动研究代码生成，让研究者可以更快地把想法变成脚本、表格和图形。但如果只有 Vibe，没有 Harness，Agent 很容易把“看起来完成了”误当成“真的可复现”。Research Harness 的作用，就是在 Vibe Research 之外加上一层研究制度：允许研究者用自然语言推进工作，但要求每一步都留下可检查的证据。
-
-简单说：
-
-> **Research Harness 让 Agent 更负责任地产生研究证据。**
-
-或者更直接地说：
-
-> 软件 Harness 约束 Agent 写代码。  
-> Research Harness 约束 Agent 做研究。  
-> 前者追求“代码通过测试”，后者追求“结论经得起追溯”。
-
+> 可选：把 output style 设为 **Harness Ops**——运行 `/config` 选 Output style，或在项目 `.claude/settings.json` 设 `outputStyle`，获得 Plan / Work / Review 的结构化进度输出。
 
 ---
 
-## 为什么需要这个框架？
+## 七阶段参考
 
-AI 智能体已经能帮助研究者写代码、清洗数据、跑模型和生成表格。但如果没有结构性约束，实证研究中的 agent work 很容易出现风险。
+完整生命周期，也可从任意中间阶段进入（见"模块化使用"）。
 
-常见问题包括：
+| # | 阶段 · 命令 | 输入 | 产出 | 强制 · 留痕 |
+|---:|---|---|---|---|
+| 1 | `setup` | — | `study_spec.md`、`analysis_plan.md`、canonical 布局、治理 `CLAUDE.md` | 建立研究合同与原始数据保护规则 |
+| 2 | `audit` | `1.rawdata/` | `4.reports/data_audit_report.md` | **只读**；不改原始数据；评估设计可行性 |
+| 3 | `clean` | 原始数据 + 审查报告 | `2.workdata/`、`3.outdata/data/`、清洗报告、`merge_report.md` | 每步 drop/recode/reshape/merge 留痕；merge 必报诊断 |
+| 4 | `plan` | `study_spec.md` + 审查报告 + 清洗后结构 | `analysis_plan.md`（任务台账） | 研究者批准后方可执行 |
+| 5 | `work <id>` / `work all` | 已批准的 `analysis_plan.md` | 脚本、日志、表格、图形 | 任务达 `cc:done` 须脚本·日志·输出·证据路径齐全 |
+| 6 | `review` | 全部产出 | `4.reports/review_report.md` | **只读**；每个数字须可追溯；判定 APPROVE / REQUEST_CHANGES / BLOCK |
+| 7 | `release` | review = APPROVE | `release/` 复制包 + `reproducibility_report.md` | 仅 APPROVE 后可发；机密数据未批准不入包 |
 
-- 同一个分析跑了两遍，但样本不一致；
-- 正文里的系数是手动复制的，后来和表格对不上；
-- 因果表述超过了识别策略实际能支撑的范围；
-- 清洗数据时悄悄修改了原始文件；
-- merge 失败却被总结成“分析已完成”；
-- 脚本无法复现论文最终结果；
-- 日志缺失，数字来源无法追溯。
+实操要点：
 
-Claude Code Research Harness 把这些风险转化为显式检查点：
+- **`clean` 每次 merge 必报：** 合并键 / 合并前后行数 / 匹配·未匹配数 / 重复键诊断 / 变量冲突 / 未解决问题。合并键不明确则停止询问，不靠猜测继续。
+- **`work` 的 `cc:done`：** 脚本存在、已运行、日志存在、预期输出存在、且证据路径已写入 `analysis_plan.md`——五者缺一不可。反复失败标 `cc:blocked` 并报告原因，绝不编造输出。
+- **`review` 三结论：** `APPROVE`（证据链足够，可发布）/ `REQUEST_CHANGES`（仍有重要问题，需修改后重审）/ `BLOCK`（严重失败，如数字不可验证或因果声明无支撑）。
 
-- 原始数据受到保护；
-- 每一次清洗决策都必须留痕；
-- 每一次合并都必须诊断；
-- 每个分析任务都必须有脚本、日志、输出路径和状态标记；
-- 每一个因果声明都必须经过识别策略审查；
-- 每一个发布包都必须包含完整证据链。
-
-这就是 AI 助手和可审计研究智能体的区别。
+> 想了解每阶段的目的与交接契约，见 [`docs/RESEARCH-WORKFLOW.md`](docs/RESEARCH-WORKFLOW.md)（英文）。
 
 ---
 
-## 七阶段研究生命周期
+## 🔒 自动强制层
 
-| 阶段 | 命令 | Harness 强制执行什么 |
-|---:|---|---|
-| 1 | `/research-harness-setup` | 初始化研究合同、文件夹结构和原始数据保护规则。 |
-| 2 | `/research-harness-audit` | 只读审查原始数据：文件、变量、缺失值、ID、单位和可行性。 |
-| 3 | `/research-harness-clean` | 编写并运行可复现的数据清洗、变量协调、reshape 和 merge 脚本。 |
-| 4 | `/research-harness-plan` | 根据研究规格、数据审查和清洗后数据结构生成可执行分析计划。 |
-| 5 | `/research-harness-work` | 执行已批准的分析任务，并在标记完成前核验脚本、日志和输出。 |
-| 6 | `/research-harness-review` | 审查识别策略、模型设定、样本构造、数字一致性和因果表述。 |
-| 7 | `/research-harness-release` | 打包复制档案：脚本、日志、输出、报告和复现说明。 |
+Harness 不只是 prompt 约束——它由**代码强制**。三层兜底：OS 只读锁 + hooks + agents，**跨所有阶段全局生效**，不依赖当前所处阶段。
 
-你可以走完整生命周期，也可以只调用其中一个模块。
+**3 个 hooks（自动拦截 / 提醒）：**
+
+| 钩子 | 触发时机 | 拦截或提醒什么 |
+|---|---|---|
+| `guard-raw-data` | 写入 / 编辑文件前 | **拒绝**对 `1.rawdata/`、`data/raw/` 的任何写入或编辑——原始数据只读，须改写到 `2.workdata/` 或 `3.outdata/`（`examples/` 除外） |
+| `guard-git-add` | 执行 `git add` 前 | **拒绝**把数据文件（`.csv/.parquet/.dta/.sas7bdat/.rds/.feather`）或 `1.rawdata/`、`2.workdata/`、`3.outdata/data/` 下文件加入暂存（`examples/`、`3.outdata/tables/` 与 `figures/` 除外） |
+| `remind-evidence` | 运行脚本后 | 检测到 R/Stata/Python 脚本运行但无日志重定向时，**提醒**：每次运行须在 `0.dofiles/logs/` 留日志，标记完成前先确认日志存在 |
+
+**2 个子 agent：**
+
+- **`analyst`** — 驱动 `work` 阶段：写并运行 R / Stata / Python 脚本、保存日志与输出、更新 `analysis_plan.md` 证据台账。**从不编造数字，从不修改原始数据。**
+- **`reviewer`** — 驱动 `review` 阶段：只读审阅，检查识别策略、数字可追溯性、因果表述强度、清洗 / 合并完整性与数据保护。**从不运行代码，从不改文件。**
 
 ---
 
-## 模块化使用场景
+## 模块化使用
 
-你**不需要每次都运行完整流程**。这个框架支持从中间阶段进入。
+你**不需要每次都走完整流程**，可以从中间阶段进入：
 
 | 你想做什么 | 使用命令 |
 |---|---|
-| 只想检查一个新数据集，不修改它 | `/research-harness-audit` |
-| 清理一个混乱的调查数据文件 | `/research-harness-audit` → `/research-harness-clean` |
-| 合并个人、家庭、社区和政策时间文件 | `/research-harness-clean` |
-| **按论文定义提取变量集和子样本** | **见"论文复现子样本提取"一节** |
-| 把一个研究想法变成可执行的实证计划 | `/research-harness-setup` → `/research-harness-plan` |
-| 只运行已批准的回归、表格和图形任务 | `/research-harness-work <task-id>` |
+| 只检查一个新数据集、不修改它 | `/research-harness-audit` |
+| 清洗一个混乱的调查数据文件 | `/research-harness-audit` → `/research-harness-clean` |
+| 合并个人 / 家庭 / 社区 / 政策时间文件 | `/research-harness-clean` |
+| 按论文定义提取分析就绪子样本 | 见下"论文复现子样本提取" |
+| 把研究想法变成可执行实证计划 | `/research-harness-setup` → `/research-harness-plan` |
+| 只运行已批准的回归 / 表格 / 图形任务 | `/research-harness-work <task-id>` |
 | 检查已有结果是否可信 | `/research-harness-review` |
 | 投稿前整理复制包 | `/research-harness-release` |
 
-Harness 支持局部进入，但每个命令都会提示：如果跳过前序阶段，会损失哪些检查、增加哪些风险。
+从中间进入时，每个命令都会提示：跳过前序阶段会损失哪些检查、增加哪些风险。例如 `clean` 可单独用，但更安全的最小路径是 `audit → clean`——如果 ID、缺失值编码、日期、单位或合并键还不清楚，不要盲目清洗数据。
 
 ---
 
 ## 论文复现子样本提取
 
-除七阶段主流程外，这个框架还支持一种独立模式：**给定一篇已发表论文，从原始调查面板中提取与论文完全对应的分析就绪子样本**。
+七阶段主流程之外的一个**可选独立模式**：给定一篇已发表论文，直接读取原始调查面板的元数据，提取与论文样本筛选、变量构造和编码一致的子样本——不需先走完整 clean。
 
-适用场景：
-
-- 复现某篇论文的基准回归之前，需要先还原论文的样本构造和变量定义
-- 用同一个原始数据集、不同的样本或变量定义进行比较或扩展
-- 验证某篇论文的描述统计数字是否可以从原始数据中复现
+适用场景：复现基准回归前先还原论文样本与变量定义；用同一原始库做不同样本 / 变量的比较或扩展；验证论文描述统计能否从原始数据复现。
 
 **标准流程（三脚本）：**
 
 ```text
-*_10_discover_vars.py   # 读取原始 .dta 元数据，定位论文所需变量的实际名称
+*_10_discover_vars.py      # 读原始 .dta 元数据，定位论文所需变量的实际名称
 *_11_<paper>_subsample.py  # 按论文筛选条件和变量定义提取子样本
 *_12_<paper>_codebook.py   # 生成含论文变量定义和均值对比的 codebook
 ```
 
-所有输出写入 `3.outdata/data/`：
+所有输出写入 `3.outdata/data/`：`*_var_list.csv`（变量元数据）、`*_subsample.parquet` / `.csv`（分析就绪子样本）、`*_codebook.csv`（含论文定义、来源说明和均值对比）。
 
-```text
-3.outdata/data/
-├── *_var_list.csv          # 原始变量元数据（变量名 + Stata 标签）
-├── *_subsample.parquet     # 分析就绪子样本（主文件）
-├── *_subsample.csv         # 同上，CSV 格式
-└── *_codebook.csv          # 含论文定义、来源说明和均值对比的变量说明表
-```
+**质量验证：** codebook 对每个构造变量标注与论文描述统计表的均值差距（`CLOSE` / `MODERATE` / `DIFFERS`）。`DIFFERS` 级别须在 `notes` 列记录差距成因，方可视为就绪。
 
-**质量验证标准：**
-
-codebook 中对每个构造变量标注与论文描述统计表的均值差距（CLOSE / MODERATE / DIFFERS）。`DIFFERS` 级别的变量须在 `notes` 列记录已知差距成因，方可视为就绪。
-
-**适用数据类型：**
-
-多波次调查面板（年度或隔年追踪）、含多个模块的大型微观数据、变量名和编码跨波次存在差异的数据集。详细的工程规则见 `docs/survey-pipeline-engineering.md`，已积累的数据集编码经验见 `docs/references/datasets/`。
-
-例如，`/research-harness-clean` 可以单独使用，但更安全的最小路径是：
-
-```text
-/research-harness-audit
-/research-harness-clean
-```
-
-如果 ID、缺失值编码、日期、单位或合并键还不清楚，不要盲目清洗数据。
-
----
-
-## 使用方法
-
-### 1. 在研究项目里安装插件
-
-在你的研究项目目录启动 Claude Code，安装插件（见上「快速上手指南 Step 1」）：
-
-```text
-/plugin marketplace add pxb988/claudecode-research-harness-workflow
-/plugin install claudecode-research-harness-workflow
-```
-
-### 2. 初始化研究项目
-
-```text
-/research-harness-setup
-```
-
-Harness 会创建或更新（canonical 布局）：
-
-```text
-study_spec.md
-analysis_plan.md
-0.dofiles/        0.dofiles/logs/
-1.rawdata/        1.rawdata/READONLY.md
-2.workdata/
-3.outdata/data/   3.outdata/figures/   3.outdata/tables/
-4.reports/
-```
-
-### 3. 填写研究合同
-
-编辑 `study_spec.md`。
-
-至少需要定义：
-
-- 研究问题；
-- 数据位置和数据字典；
-- 观测单位；
-- 结果变量、处理/暴露变量、控制变量；
-- 样本限制；
-- 识别策略；
-- 预期表格和图形。
-
-后续任何关于结果变量、样本限制、估计量或识别策略的修改，都应该被视为研究设计变更，而不是悄悄改代码。
-
-### 4. 审查原始数据
-
-```text
-/research-harness-audit
-```
-
-这一阶段只读，不修改任何原始数据。它检查 `1.rawdata/` 并生成：
-
-```text
-4.reports/data_audit_report.md
-```
-
-数据审查包括：
-
-- 文件清单；
-- 变量、类型、缺失值、取值范围；
-- 候选 ID 变量和时间变量；
-- 重复键检查；
-- 单位和编码不一致问题；
-- 可能的合并键；
-- 当前数据是否支持拟定研究设计。
-
-如果数据不能支撑研究设计，Harness 会停止并报告不可行原因。
-
-### 5. 清洗和合并数据
-
-```text
-/research-harness-clean
-```
-
-清洗阶段必须生成证据链：
-
-```text
-4.reports/data_cleaning_plan.md
-0.dofiles/clean_*.R | 0.dofiles/clean_*.do | 0.dofiles/clean_*.py
-0.dofiles/logs/clean_YYYYMMDD.log
-4.reports/data_cleaning_report.md
-4.reports/merge_report.md
-2.workdata/
-3.outdata/data/
-```
-
-每一次 drop、recode、reshape、merge 和派生变量构造都必须记录。
-
-每一次 merge 必须报告：
-
-- 合并键；
-- 合并前行数；
-- 合并后行数；
-- 匹配和未匹配数量；
-- 重复键诊断；
-- 变量冲突；
-- 尚未解决的合并问题。
-
-如果合并键不明确，Harness 必须停止并向研究者确认。
-
-### 6. 生成分析计划
-
-```text
-/research-harness-plan
-```
-
-这个阶段把研究合同和数据报告转化为可执行任务：
-
-- 描述性统计；
-- 主模型；
-- 稳健性检验；
-- 异质性分析；
-- 表格和图形；
-- 脚本路径；
-- 日志路径；
-- 输出路径；
-- 完成标准；
-- 状态标记。
-
-研究者批准 `analysis_plan.md` 后，才能进入分析执行阶段。
-
-### 7. 执行已批准任务
-
-```text
-/research-harness-work 1.1
-/research-harness-work 2
-/research-harness-work all
-```
-
-一个任务只有在满足以下条件时才能标记为 `cc:done`：
-
-- 脚本存在；
-- 脚本已经运行；
-- 日志存在；
-- 预期输出存在；
-- 证据路径已经写入 `analysis_plan.md`。
-
-如果任务反复失败，它会被标记为 `cc:blocked`。Harness 必须报告失败原因，而不是编造输出。
-
-### 8. 结果报告前审阅
-
-```text
-/research-harness-review
-```
-
-审阅阶段检查：
-
-- 估计量是否匹配研究设计；
-- 样本限制是否与 `study_spec.md` 一致；
-- N、系数、标准误、p 值、表格和图形是否能追溯到日志或输出；
-- 因果语言是否被识别策略支持；
-- 清洗和合并报告是否完整；
-- 原始数据是否保持未修改。
-
-审阅结论有三种：
-
-| 结论 | 含义 |
-|---|---|
-| `APPROVE` | 证据链足够，可以发布。 |
-| `REQUEST_CHANGES` | 仍有重要问题，需要修改后重新审阅。 |
-| `BLOCK` | 存在严重失败，例如数字不可验证或因果声明无支撑。 |
-
-### 9. 打包复制档案
-
-```text
-/research-harness-release
-```
-
-只有在审阅结论为 `APPROVE` 后，才允许 release。
-
-复制包包含：
-
-- 最终版 `study_spec.md`；
-- 最终版 `analysis_plan.md`；
-- 数据审查、清洗、合并、审阅和可复现性报告；
-- 脚本；
-- 日志；
-- 表格；
-- 图形；
-- 已核验和未核验声明清单；
-- 分步骤复现说明。
-
-未经明确批准，不得把机密原始数据放入 release package。
+**适用数据：** 多波次调查面板（年度或隔年追踪）、含多个模块的大型微观数据、变量名与编码跨波次有差异的数据集。工程规则见 `docs/survey-pipeline-engineering.md`，已积累的数据集编码经验见 `docs/references/datasets/`。
 
 ---
 
 ## 项目结构
 
+`setup` 创建以下 canonical 布局（8 个目录）：
+
 ```text
 your-project/
-├── study_spec.md
-├── analysis_plan.md
+├── study_spec.md             # 研究合同
+├── analysis_plan.md          # 任务台账
 ├── CLAUDE.md                 # 项目治理（由 setup 交付）
 ├── 0.dofiles/                # R / Stata / Python 脚本
 │   └── logs/                 # 运行日志
@@ -435,17 +156,10 @@ your-project/
 │   ├── data/                 # 分析就绪数据 + codebook
 │   ├── figures/
 │   └── tables/
-├── 4.reports/
-│   ├── data_audit_report.md
-│   ├── data_cleaning_plan.md
-│   ├── data_cleaning_report.md
-│   ├── merge_report.md
-│   ├── review_report.md
-│   └── reproducibility_report.md
-└── release/
+└── 4.reports/                # 审查 / 清洗 / 合并 / 审阅 / 复现报告
 ```
 
----
+`release/`（项目根）由 `release` 阶段在 APPROVE 后按需生成，存放最终复制包——不属于 `setup` 的初始布局。
 
 ## 核心文件
 
@@ -454,23 +168,20 @@ your-project/
 | `study_spec.md` | 研究合同：问题、数据、设计、变量、样本和预期产出。 |
 | `analysis_plan.md` | 任务台账：任务、路径、证据、完成标准和状态标记。 |
 | `4.reports/data_audit_report.md` | 原始数据结构和研究可行性的只读证据。 |
-| `4.reports/data_cleaning_plan.md` | 经研究者批准的数据清洗和合并计划。 |
 | `4.reports/data_cleaning_report.md` | recode、filter、派生变量和样本变化的证据。 |
 | `4.reports/merge_report.md` | 每一次 merge 的诊断和冲突解决记录。 |
 | `4.reports/review_report.md` | 对识别策略、模型匹配、数字准确性和研究声明的独立审阅。 |
 | `4.reports/reproducibility_report.md` | 最终结果的复现说明和证据索引。 |
 
----
-
 ## 可累积的知识层（references）
 
 技能会自动查阅去标识化的可复用知识：
 
-- `docs/references/datasets/<id>.md` — 数据集的文件命名与变量编码 gotchas
-- `docs/references/replications/<paper>.md` — 某论文的概念→变量映射与公开目标均值
-- `docs/survey-pipeline-engineering.md` — 宽面板内存/类型工程规律
+- `docs/references/datasets/<id>.md` — 数据集的文件命名与变量编码 gotchas（当前已含 CHARLS）
+- `docs/references/replications/<paper>.md` — 论文的概念→变量映射与公开目标均值（当前为可扩展模板）
+- `docs/survey-pipeline-engineering.md` — 宽面板内存 / 类型工程规律
 
-新增一个文件 + `docs/references/index.json` 一条登记，即可扩展覆盖，**无需改任何技能**。
+新增 1 个文件 + `docs/references/index.json` 一条登记即可扩展覆盖，**无需改任何技能**。
 
 ---
 
@@ -484,73 +195,55 @@ your-project/
 | `cc:blocked` | 无法继续，原因已记录。 |
 | `cc:infeasible` | 数据或设计不支持该任务，停止原因已记录。 |
 
----
-
 ## 研究诚信规则
 
-完整规则见 [`docs/INTEGRITY-RULES.md`](docs/INTEGRITY-RULES.md)。
-
-简版如下：
+完整规则见 [`docs/INTEGRITY-RULES.md`](docs/INTEGRITY-RULES.md)。简版：
 
 | 规则 | 要求 |
 |---|---|
 | 保护原始数据 | 永远不要修改 `1.rawdata/`。 |
 | 不编造证据 | 不得捏造结果、样本量、系数、引用或稳健性检验。 |
-| 没有日志就没有结论 | 没有脚本和日志，不得声称分析已经运行。 |
+| 没有日志就没有结论 | 没有脚本和日志，不得声称分析已运行。 |
 | 不静默改变样本 | 每一次 drop、filter 和 recode 都必须记录。 |
 | 每次合并都要诊断 | 报告合并键、行数、匹配率、重复键和变量冲突。 |
 | 使用相对路径 | 脚本中不得使用机器特定的绝对路径。 |
 | 标注因果声明 | 使用 `[descriptive]`、`[associational]`、`[quasi-experimental]` 或 `[experimental]`。 |
-| 不可行时停止 | 如果数据不能支撑设计，报告不可行原因，不得发明变通方法。 |
+| 不可行时停止 | 数据不能支撑设计时报告不可行原因，不得发明变通方法。 |
 | 合并键不清楚就询问 | 不得在合并键模糊时靠猜测继续。 |
-
----
 
 ## 示例项目
 
-见 [`examples/README.md`](examples/README.md)。
+`examples/` 提供**起始夹具**——含原始数据 + `study_spec.md`，供你对其运行对应阶段命令（不是预先跑完的成品）。详见 [`examples/README.md`](examples/README.md)。
 
-### `examples/basic-data-cleaning/`
-
-一个小型合成家户调查数据，内置典型数据质量问题：
-
-- 缺失 ID；
-- `-9` 缺失值编码；
-- 异常家庭规模；
-- 无效地区编码；
-- 有记录的样本丢弃过程。
-
-覆盖命令：
+**`examples/basic-data-cleaning/`** — 小型合成家户调查，内置典型数据质量问题（缺失 ID、`-9` 缺失值编码、异常家庭规模、无效地区编码）。目录含 `0.dofiles/`、`1.rawdata/`、`4.reports/` 及 `study_spec.md`，可对其运行：
 
 ```text
 /research-harness-audit
 /research-harness-clean
 ```
 
-### `examples/econometrics-replication/`
-
-一个带双重差分设计的合成面板数据复制项目：
-
-- household-year 面板；
-- 政策时间文件；
-- 必需的 merge 诊断；
-- 双向固定效应模型；
-- 剔除早期实施地区的稳健性检验；
-- 完整七阶段生命周期。
-
-覆盖命令：
-
-```text
-/research-harness-setup
-/research-harness-audit
-/research-harness-clean
-/research-harness-plan
-/research-harness-work
-/research-harness-review
-/research-harness-release
-```
+**`examples/econometrics-replication/`** — 带双重差分设计的合成面板（household-year 面板 + 政策时间文件）。目录含 `0.dofiles/`、`1.rawdata/` 及 `study_spec.md` 作为起点，可对其运行完整七阶段命令序列（`setup → audit → clean → plan → work → review → release`）。
 
 ---
+
+## 为什么需要这个框架
+
+AI 智能体能帮研究者写代码、清洗数据、跑模型、生成表格。但没有结构性约束，实证研究里的 agent work 很容易出问题：
+
+- 同一分析跑两遍，样本不一致；
+- 正文系数手动复制，后来和表格对不上；
+- 因果表述超过识别策略实际能支撑的范围；
+- 清洗时悄悄改了原始文件；
+- merge 失败却被总结成"分析已完成"；
+- 脚本无法复现最终结果；日志缺失，数字来源无法追溯。
+
+Harness 把这些风险转化为显式检查点：原始数据受保护、每次清洗决策留痕、每次合并有诊断、每个分析任务有脚本 / 日志 / 输出 / 状态、每个因果声明经识别策略审查、每个发布包含完整证据链。这就是 AI 助手和可审计研究智能体的区别。
+
+### 软件 Harness 与 Research Harness 有什么不同？
+
+软件开发（含 vibe coding）里的 Harness 把编程 Agent 约束在"需求 → 任务 → 改码 → 测试 → review → release"，核心是**不让 Agent 凭感觉写代码，而让每次修改都能被测试、回滚、验收**。Research Harness 继承这个思想，但把对象从"软件代码"换成"实证研究"。研究里真正危险的不是语法错误，而是样本构造不透明、清洗不可追溯、合并键错、结果不可复现、因果表述超出识别设计、正文数字找不到对应日志。所以它要求 Agent 证明：原始数据未改；清洗合并有脚本、有日志、有报告；样本 / 变量 / 设定与规格一致；每个表图数字可追溯；每个因果声明经审查；数据或设计不支持某结论时停止，而非编造一个看似合理的结果。
+
+> 软件 Harness 约束 Agent 写代码（求"代码通过测试"）；Research Harness 约束 Agent 做研究（求"结论经得起追溯"）。
 
 ## 适用场景
 
@@ -567,31 +260,19 @@ your-project/
 | 可复现实证研究教学 | 非常适合 |
 | 没有研究设计需求的纯机器学习 | 部分适合 |
 
----
-
 ## 设计哲学
 
-Research Agent Harness 遵循四个原则。
+**1. 数据约束研究问题。** 智能体不得提出数据无法支撑的研究设计。
 
-**1. 数据约束研究问题。**  
-智能体不得提出数据无法支撑的研究设计。
+**2. 确定性工作必须留下确定性证据。** 清洗、合并、估计和制表都必须有脚本、日志和输出。
 
-**2. 确定性工作必须留下确定性证据。**  
-清洗、合并、估计和制表都必须有脚本、日志和输出。
+**3. 人类审查门槛是系统的一部分。** 研究设计、样本限制和因果声明的关键变更需要研究者批准。
 
-**3. 人类审查门槛是系统的一部分。**  
-研究设计、样本限制和因果声明的关键变更需要研究者批准。
-
-**4. 失败也是有效的研究输出。**  
-如果数据不足、前提失败或证据链断裂，正确做法是停止，并说明原因。
-
----
+**4. 失败也是有效的研究输出。** 如果数据不足、前提失败或证据链断裂，正确做法是停止，并说明原因。
 
 ## 致谢
 
 本仓库的 Harness 框架结构借鉴 [Chachamaru127/claude-code-harness](https://github.com/Chachamaru127/claude-code-harness) 开发，在此对原作者表示感谢。
-
----
 
 ## License
 
