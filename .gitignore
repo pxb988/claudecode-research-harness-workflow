@@ -1,0 +1,46 @@
+# ============================================================
+# Repo = pure Claude Code plugin. NO real research data belongs here.
+# The project-level data-protection .gitignore is delivered by
+# research-harness-setup (templates/project/gitignore.template).
+# examples/ ships SYNTHETIC fixtures in canonical layout and they ARE tracked.
+# ============================================================
+
+# Data safety net: guard against accidentally running a real Project at the REPO
+# ROOT. Anchored to root (leading /) so examples/'s nested canonical dirs stay
+# tracked — see examples/FIXTURES.json.
+/1.rawdata/
+/2.workdata/
+/3.outdata/data/
+/0.dofiles/logs/
+*.dta
+*.parquet
+*.sas7bdat
+*.rds
+*.feather
+# NOTE: do NOT ignore *.csv — that would hide examples' synthetic fixtures.
+
+# OS / editor noise
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# Node (hook tests may pull deps locally; none committed)
+node_modules/
+
+# Local Claude state (not distributed)
+.claude/settings.local.json

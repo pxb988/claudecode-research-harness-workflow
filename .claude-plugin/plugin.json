@@ -1,0 +1,23 @@
+{
+  "name": "claudecode-research-harness-workflow",
+  "version": "1.0",
+  "description": "Research data-processing harness for Claude Code — a controlled environment that drives reproducible empirical research from setup to release, enforces raw-data protection and evidence trails, and keeps code execution separate from interpretation.",
+  "author": {
+    "name": "Chen Zhu",
+    "url": "https://github.com/pxb988"
+  },
+  "homepage": "https://github.com/pxb988/claudecode-research-harness-workflow",
+  "repository": "https://github.com/pxb988/claudecode-research-harness-workflow",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "empirical-research",
+    "reproducibility",
+    "econometrics",
+    "data-cleaning",
+    "replication",
+    "workflow"
+  ],
+  "skills": ["./skills/"]
+}

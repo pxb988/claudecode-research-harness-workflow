@@ -1,0 +1,29 @@
+# Paths excluded from `git archive` release tarballs (export-ignore).
+#
+# NOTE: the PRIMARY distribution channel is marketplace `git clone`, which
+# export-ignore does NOT affect. For the clone channel, exclusion is enforced by
+# the orphan release snapshot (see CLAUDE.md "Release boundary"), not this file.
+# This file only trims the SECONDARY Zenodo `git archive` tarball.
+
+# Contributor-facing docs — not needed in a downloaded archive
+CLAUDE.md               export-ignore
+CONTEXT.md              export-ignore
+
+# Dev-only scaffolding / local config
+docs/superpowers/       export-ignore
+.claude/                export-ignore
+
+# Tests — not needed by end users pulling a tarball
+hooks/test/                             export-ignore
+docs/references/test-index-resolve.js   export-ignore
+
+# Line-ending normalization
+* text=auto eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.js text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg text

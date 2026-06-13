@@ -1,0 +1,14 @@
+{
+  "$comment": "Machine-readable registry. Skills resolve a dataset short-id or paper-id to a reference file. Add an entry when you add a reference under datasets/ or replications/.",
+  "schema": {
+    "datasets": "map of dataset short-id -> { file, title }",
+    "replications": "map of paper-id -> { file, dataset, title }"
+  },
+  "datasets": {
+    "charls": {
+      "file": "datasets/charls.md",
+      "title": "China Health and Retirement Longitudinal Study"
+    }
+  },
+  "replications": {}
+}

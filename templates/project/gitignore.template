@@ -1,0 +1,22 @@
+# Research project — data protection (delivered by research-harness-setup)
+# Individual-level microdata and derived datasets must NEVER be committed.
+1.rawdata/
+2.workdata/
+3.outdata/data/
+0.dofiles/logs/
+
+# Derived data formats (belt-and-suspenders)
+*.dta
+*.parquet
+*.sas7bdat
+*.rds
+*.feather
+
+# 4.reports/ markdown IS safe to commit — not ignored.
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,8 @@
+{
+  "$comment": "Provenance whitelist for example fixtures. Every data file under examples/ MUST be listed here as synthetic or public-domain. The release content scan treats listed files as cleared; an unlisted data file under examples/ is a leak signal.",
+  "fixtures": [
+    { "path": "examples/basic-data-cleaning/1.rawdata/households.csv", "_fixture": "synthetic", "source": "randomly generated demo data" },
+    { "path": "examples/econometrics-replication/1.rawdata/panel_outcomes.csv", "_fixture": "synthetic", "source": "randomly generated DiD demo panel" },
+    { "path": "examples/econometrics-replication/1.rawdata/policy_timing.csv", "_fixture": "synthetic", "source": "randomly generated policy-timing demo" }
+  ]
+}
