@@ -49,17 +49,40 @@
 
 **怎么确认装好了：** 开始输入 `/research-harness` 时，应能看到 9 个技能(8 个 `/research-harness-*` 功能技能 + `/workflow-guide` 导航)被提示出来。若没看到，多半是没在本项目启用——见[常见问题](docs/入门指南.md#7-常见问题--出错怎么办)。
 
-> 想让协作者克隆仓库即得插件：把 `enabledPlugins` + `extraKnownMarketplaces` 写进项目 `.claude/settings.json` 并提交。
-
 ### Step 2 · 初始化并开工
 
 ```text
 /research-harness-setup
 ```
 
-它会生成 canonical 布局（标准文件夹结构）、项目治理 `CLAUDE.md`、数据保护 `.gitignore` 与权限，并在原始数据放入 `1.rawdata/` 后为其施加 OS 只读锁。
+它会生成 canonical 布局（标准文件夹结构）、项目治理 `CLAUDE.md`、数据保护 `.gitignore`，以及项目级 `.claude/settings.json`（启用插件 + 数据保护权限），并在原始数据放入 `1.rawdata/` 后为其施加 OS 只读锁。
 
 **怎么确认成功：** 项目里出现 `0.dofiles/`、`1.rawdata/`、`2.workdata/`、`3.outdata/`、`4.reports/` 等目录，以及 `study_spec.md`、`analysis_plan.md`。之后按 `audit → clean → plan → work → review → release` 顺序推进即可（每阶段详解见[入门指南](docs/入门指南.md#3-手把手跑完一个完整项目主线)）。
+
+### 让协作者克隆即得插件（可选）
+
+**你不用手写任何配置**——上一步的 `setup` 已经在项目里生成了 `.claude/settings.json`（若该文件已存在，则把下列字段合并进去，不覆盖你原有设置）。它的关键就是这两段：
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "research-harness": {
+      "source": { "source": "github", "repo": "pxb988/claudecode-research-harness-workflow" }
+    }
+  },
+  "enabledPlugins": ["claudecode-research-harness-workflow"]
+}
+```
+
+- `extraKnownMarketplaces` 告诉 Claude Code 去哪里找这个插件，`enabledPlugins` 声明本项目启用它。
+- **「提交」就是把这个文件用 git 纳入版本库：**
+
+  ```bash
+  git add .claude/settings.json
+  git commit -m "chore: 启用 research-harness 插件"
+  ```
+
+这样别人 `git clone` 你的项目、信任其设置后，**无需再走 Step 1 安装**，就自动得到同一个插件和同一套数据防护。
 
 > **不确定该用哪个技能？运行 `/workflow-guide`。**
 
