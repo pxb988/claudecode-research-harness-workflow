@@ -44,3 +44,7 @@ node_modules/
 
 # Local Claude state (not distributed)
 .claude/settings.local.json
+
+# Local dev scaffolding — design/implementation plans kept on the local working
+# tree for reference, but never published. Decisions are captured in docs/adr/.
+docs/superpowers/
