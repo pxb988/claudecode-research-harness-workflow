@@ -1,98 +1,110 @@
-# CLAUDE.md — Research Project Governance
+# CLAUDE.md — 科研项目治理规则
 
-This project is driven by the Research Harness Workflow plugin. These rules govern all work in this project. They are the canonical, single source of truth for project layout and data-handling rules.
+本项目由 Research Harness Workflow 插件驱动。以下规则约束本项目中的全部工作，是项目目录结构与数据处理规则的唯一权威来源（single source of truth）。
 
-## Canonical Project Layout
-
-```
-study_spec.md          analysis_plan.md       CLAUDE.md(this file)
-0.dofiles/  └─ logs/    # R / Stata / Python scripts + run logs
-1.rawdata/              # raw source microdata — OS read-only, never written
-2.workdata/            # intermediate cleaned data — regenerable
-3.outdata/  ├─ data/  ├─ figures/  └─ tables/   # analysis-ready data + figures + tables
-4.reports/             # governance / audit markdown
-```
-
-## 1. Work Scope
-
-### What You Do
-- Write R, Stata, or Python scripts based on the approved `analysis_plan.md`, saved to `0.dofiles/`
-- Run scripts and save logs to `0.dofiles/logs/`
-- Save cleaned/intermediate data to `2.workdata/`; analysis-ready data + codebook to `3.outdata/data/`
-- Save figures to `3.outdata/figures/` and tables to `3.outdata/tables/`
-- Populate `analysis_plan.md` with evidence paths after each completed task
-- Fill in report templates under `4.reports/`
-
-### What You Must Not Do
-- **Never write to `1.rawdata/`** — absolute prohibition, no exceptions
-- **Never invent or estimate numbers** — every coefficient, p-value, sample size, or percentage must come from an actual script run with a log
-- **Never mark a task done** without verifying a log file exists at the documented path
-- **Never use absolute file paths** in scripts — always use paths relative to the project root
-- **Never claim a merge is complete** without a `4.reports/merge_report.md` entry with pre/post row counts
-- **Never silently drop observations** — every filter must be logged with the reason and count
-
----
-
-## 2. Script Standards
-
-All scripts must:
-
-- Begin with a header comment: project name, task ID, date, author (Claude Code)
-- Use project-relative paths only (e.g., `1.rawdata/households.csv`, not `/Users/...`)
-- Log all operations to a file (not just to stdout)
-- Exit with a non-zero code on error so failures are visible in logs
-- Be deterministic: same inputs → same outputs (set random seeds if needed)
-
-### Language-specific conventions
-
-**R:** Use `sink()` or `tee` for logs; `here::here()` for paths; `set.seed()` for randomness.
-
-**Stata:** Use `log using`, `quietly`, and `assert` for verification; relative paths via `cd` at script top set once.
-
-**Python:** Use `logging` module to file; `pathlib.Path` for paths; `random.seed()` / `numpy.random.seed()` for reproducibility.
-
----
-
-## 3. Commit Convention
+## 标准项目目录结构
 
 ```
-audit:   data audit report for <dataset>
-clean:   cleaning script for <task> — N obs in, M obs out
-plan:    analysis plan for <study>
-analysis: <task-id> <description> — script ran, log saved
-review:  review report — APPROVE / REQUEST_CHANGES
-release: replication package v<version>
+study_spec.md          analysis_plan.md       CLAUDE.md（本文件）
+0.dofiles/  └─ logs/    # R / Stata / Python 脚本 + 运行日志
+1.rawdata/              # 原始微观数据 — 操作系统层只读，永不写入
+2.workdata/            # 中间清洗数据 — 可重新生成
+3.outdata/  ├─ data/  ├─ figures/  └─ tables/   # 可分析数据 + 图 + 表
+4.reports/             # 治理 / 审计 markdown 报告
+```
+
+## 1. 工作范围
+
+### 你应该做的
+
+- 依据已批准的 `analysis_plan.md` 编写 R、Stata 或 Python 脚本，保存到 `0.dofiles/`
+- 运行脚本并把日志保存到 `0.dofiles/logs/`
+- 把清洗后的中间数据保存到 `2.workdata/`；可分析数据 + 变量手册（codebook）保存到 `3.outdata/data/`
+- 把图保存到 `3.outdata/figures/`，表保存到 `3.outdata/tables/`
+- 每完成一个任务，在 `analysis_plan.md` 中补全对应的证据路径
+- 填写 `4.reports/` 下的报告模板
+
+### 你绝不能做的
+
+- **绝不写入 `1.rawdata/`** —— 绝对禁止，没有例外
+- **绝不臆造或估算数字** —— 每一个系数、p 值、样本量或百分比都必须来自一次真实的脚本运行并有日志
+- **没有核实日志文件存在于记录路径**之前，绝不把任务标记为完成
+- **绝不在脚本中使用绝对路径** —— 一律使用相对于项目根目录的路径
+- **没有在 `4.reports/merge_report.md` 写入含前后行数的条目**之前，绝不声称合并已完成
+- **绝不无声丢弃观测** —— 每一次筛选都必须记录原因与数量
+
+---
+
+## 2. 脚本规范
+
+所有脚本必须：
+
+- 以头部注释开头：项目名、任务 ID、日期、作者（Claude Code）
+- 仅使用项目相对路径（例如 `1.rawdata/households.csv`，而非 `/Users/...`）
+- 把所有操作记录到日志文件（不能只输出到 stdout）
+- 出错时以非零退出码退出，使失败在日志中可见
+- 可复现：相同输入 → 相同输出（必要时设置随机种子）
+
+### 语言约定（生成产物的中英文边界）
+
+生成产物面向中文使用者，遵循以下中英文边界：
+
+- **用简体中文**：脚本注释、日志信息（`cat` / `display` 等打印文本）、变量标签（label）与变量说明、所有 markdown 报告与规格文档的标题、字段标签、引导语与结论。
+- **保留英文**：代码标识符与变量名（如 `income_annual`、`hhid`、最终指标名）、任务状态标记（`cc:todo` / `cc:wip` / `cc:done` / `cc:blocked` / `cc:infeasible`）、计量经济学术语缩写（DiD / IV / RD / RCT / MCAR / MAR / MNAR）、文件路径与文件名。
+- 中间数据文件本身的列名（供下游脚本读取的结构性字段）保持英文标识符；其对应的**人类可读说明、注释、codebook 描述**用简体中文。
+
+### 各语言专用约定
+
+**R：** 用 `sink()` 或 `tee` 记日志；用 `here::here()` 处理路径；用 `set.seed()` 保证随机可复现。
+
+**Stata：** 用 `log using`、`quietly`、`assert` 做验证；在脚本顶部用一次 `cd` 设定相对路径基准。
+
+**Python：** 用 `logging` 模块写文件日志；用 `pathlib.Path` 处理路径；用 `random.seed()` / `numpy.random.seed()` 保证可复现。
+
+---
+
+## 3. 提交信息约定
+
+提交信息使用简体中文。推荐按以下场景命名：
+
+```
+audit:   <数据集> 的数据审计报告
+clean:   <任务> 的清洗脚本 —— 输入 N 条观测，输出 M 条
+plan:    <研究> 的分析计划
+analysis: <任务-id> <描述> —— 脚本已运行，日志已保存
+review:  审稿报告 —— APPROVE / REQUEST_CHANGES
+release: 复现包 v<版本号>
 ```
 
 ---
 
-## 4. Escalation Rules
+## 4. 升级处理规则（脚本失败时）
 
-If a script fails, follow this path:
+如果脚本失败，按以下路径处理：
 
-1. Read the log. Identify the error.
-2. Fix the script. Re-run. Save new log.
-3. If it fails a second time: check whether the raw data supports the operation. Document what is missing.
-4. If it fails a third time: **stop**. Write an infeasibility note in `analysis_plan.md` under the task. Mark the task `cc:infeasible`. Do not invent output or work around a data limitation silently.
+1. 读日志，定位错误。
+2. 修脚本，重跑，保存新日志。
+3. 若第二次仍失败：检查原始数据是否支持该操作，记录缺了什么。
+4. 若第三次仍失败：**停下**。在 `analysis_plan.md` 该任务下写一条「不可行说明」，把任务标记为 `cc:infeasible`。不要臆造输出，也不要无声地绕过数据限制。
 
-**Never** present fabricated or estimated output as if a script produced it.
-
----
-
-## 5. Data Cleaning Rules
-
-When running `/research-harness-clean`:
-
-- Read source files only from `1.rawdata/`
-- Write output only to `3.outdata/data/` or `2.workdata/`
-- Every dropped observation: log the filter condition and the count dropped
-- Every merge: fill in `merge_report.md` — keys, left count, right count, post-merge count, unmatched counts
-- If merge keys are ambiguous or missing: stop, document the problem, and ask the user for clarification
-- If two source files contain overlapping variables with different values: report the conflict, do not silently choose one
+**绝不**把臆造或估算的输出当作脚本真实产出来呈现。
 
 ---
 
-## 6. Task Completion Report（任务完成报告）
+## 5. 数据清洗规则
+
+运行 `/research-harness-clean` 时：
+
+- 只从 `1.rawdata/` 读取源文件
+- 只向 `3.outdata/data/` 或 `2.workdata/` 写入输出
+- 每丢弃一条观测：记录筛选条件与丢弃数量
+- 每一次合并：填写 `merge_report.md` —— 键、左表行数、右表行数、合并后行数、未匹配数量
+- 若合并键含糊或缺失：停下，记录问题，并向用户求证
+- 若两个源文件存在同名但取值不同的变量：报告冲突，不要擅自选一个
+
+---
+
+## 6. 任务完成报告（Task Completion Report）
 
 **每次任务完成后，必须生成一份中文报告**，保存到 `4.reports/` 目录，文件名格式为 `report_<task-slug>_<YYYYMMDD>.md`。
 
@@ -116,42 +128,42 @@ When running `/research-harness-clean`:
 
 ---
 
-## 7. Data Protection and Version Control
+## 7. 数据保护与版本控制
 
-The following directories contain survey microdata or derived individual-level data and are subject to data protection requirements. They **must never be committed to git or pushed to any remote repository (including GitHub)**:
+以下目录包含调查微观数据或派生的个体层级数据，受数据保护要求约束。它们**绝不能提交到 git 或推送到任何远程仓库（包括 GitHub）**：
 
-| Directory | Reason |
+| 目录 | 原因 |
 |-----------|--------|
-| `1.rawdata/` | Raw survey microdata — licensed, individual-level |
-| `2.workdata/` | Derived individual-level datasets during processing |
-| `3.outdata/data/` | Final merged panel and codebook — individual-level |
-| `0.dofiles/logs/` | May contain row counts and identifiers from data runs |
+| `1.rawdata/` | 原始调查微观数据 —— 有授权许可、个体层级 |
+| `2.workdata/` | 处理过程中派生的个体层级数据集 |
+| `3.outdata/data/` | 最终合并面板与 codebook —— 个体层级 |
+| `0.dofiles/logs/` | 可能含数据运行的行数与标识符 |
 
-These paths are listed in `.gitignore`. Do not remove them from `.gitignore` under any circumstance.
+这些路径已列入 `.gitignore`。任何情况下都不得把它们从 `.gitignore` 移除。
 
-**Enforcement rules for Claude Code:**
+**对 Claude Code 的强制规则：**
 
-- **Never `git add`** any file under the above directories, even if explicitly asked
-- **Never commit** any merged panel or codebook CSV, or any `.parquet`/`.dta` file
-- **Never push** data files to any remote; if a user asks, explain the data protection requirement and refuse
-- Before any `git add .` or `git add -A`, verify no data files are staged
-- Replication packages (for sharing) include **scripts and reports only** — never the data itself
+- **绝不 `git add`** 上述目录下的任何文件，即使被明确要求
+- **绝不提交**任何合并面板或 codebook CSV，或任何 `.parquet` / `.dta` 文件
+- **绝不推送**数据文件到任何远程；用户若要求，解释数据保护要求并拒绝
+- 任何 `git add .` 或 `git add -A` 之前，核实没有数据文件被暂存
+- 复现包（用于分享）只包含**脚本与报告** —— 绝不包含数据本身
 
 ---
 
-## 8. Research Integrity Rules
+## 8. 科研诚信规则
 
-The 11 rules below are self-contained. The full annotated list lives in the plugin repo:
+下列 11 条规则是自包含的。完整带注解版本见插件仓库：
 <https://github.com/pxb988/claudecode-research-harness-workflow/blob/main/docs/INTEGRITY-RULES.md>
 
-1. Never modify `1.rawdata/`
-2. Never fabricate results, citations, sample sizes, coefficients, p-values, or robustness checks
-3. Never claim an analysis ran without a corresponding script and log on disk
-4. Never silently drop observations
-5. Always use project-relative paths
-6. Mark all causal claims with identification strength: `[descriptive]` / `[correlational]` / `[quasi-experimental: DiD/IV/RD]` / `[experimental]`
-7. If data are insufficient, stop and report infeasibility — never invent a workaround
-8. Every merge must report pre/post row counts, match rates, and duplicate diagnostics
-9. If merge keys are ambiguous or missing, stop and ask — never guess
-10. Preserve an evidence trail for every table, figure, and number: script path + log path + output path
-11. Keep code execution separate from narrative interpretation
+1. 绝不修改 `1.rawdata/`
+2. 绝不臆造结果、引用、样本量、系数、p 值或稳健性检验
+3. 没有对应的脚本和磁盘日志，绝不声称某项分析已运行
+4. 绝不无声丢弃观测
+5. 一律使用项目相对路径
+6. 所有因果主张都标注识别强度：`[descriptive]` / `[correlational]` / `[quasi-experimental: DiD/IV/RD]` / `[experimental]`
+7. 若数据不足，停下并报告不可行 —— 绝不臆造变通方案
+8. 每一次合并都必须报告前后行数、匹配率与重复键诊断
+9. 若合并键含糊或缺失，停下并求证 —— 绝不猜测
+10. 为每张表、每张图、每个数字保留证据链：脚本路径 + 日志路径 + 输出路径
+11. 把代码执行与叙述性解读分开

@@ -1,90 +1,90 @@
-# Study Specification — Basic Data Cleaning Example
+# 研究规格 — 基础数据清洗示例
 
-> This is a pre-filled example spec. It is intentionally simple.
-> The research question is trivial — the purpose is to demonstrate the cleaning workflow.
-
----
-
-## 1. Research Question
-
-**Primary research question:**
-What is the distribution of household income and household size in the synthetic survey sample, and how does it vary by region?
-
-**Secondary questions:**
-None.
+> 这是一份预填好的示例规格，刻意保持简单。
+> 研究问题本身无足轻重——其目的是演示数据清洗工作流。
 
 ---
 
-## 2. Identification Strategy
+## 1. 研究问题
 
-**Design type:** cross-sectional descriptive
+**主研究问题：**
+在这份合成调查样本中，家庭收入与家庭规模的分布如何，又如何随地区而变化？
 
-**Identification strength:** `[descriptive]`
-
-**Identification assumption:** None — this is descriptive analysis only.
-
----
-
-## 3. Data
-
-**Primary dataset:**
-- Path: `1.rawdata/`
-- File name: `households.csv`
-- Data dictionary path: none (variables described below)
-- Unit of observation: household
-- Geographic coverage: 4 synthetic regions (A, B, C, D)
-- Time coverage: single cross-section (survey year 2022)
-- Source: synthetically generated for demonstration
+**次要问题：**
+无。
 
 ---
 
-## 4. Variables
+## 2. 识别策略
 
-**Outcome variable(s):**
+**设计类型：** 横截面描述性分析
 
-| Variable name | Description | Source file | Units |
+**识别强度：** `[descriptive]`
+
+**识别假设：** 无——本研究仅为描述性分析。
+
+---
+
+## 3. 数据
+
+**主数据集：**
+- 路径：`1.rawdata/`
+- 文件名：`households.csv`
+- 数据字典路径：无（变量在下文描述）
+- 观测单位：家庭
+- 地理覆盖：4 个合成地区（A、B、C、D）
+- 时间覆盖：单一横截面（调查年份 2022）
+- 来源：为演示而合成生成
+
+---
+
+## 4. 变量
+
+**结果变量：**
+
+| 变量名 | 描述 | 来源文件 | 单位 |
 |---|---|---|---|
-| `income_annual` | Annual household income | `households.csv` | local currency units; `-9` = missing |
-| `hh_size` | Number of household members | `households.csv` | count |
+| `income_annual` | 家庭年收入 | `households.csv` | 本地货币单位；`-9` = 缺失 |
+| `hh_size` | 家庭成员数 | `households.csv` | 计数 |
 
-**Treatment / exposure variable(s):** None (descriptive only).
+**处理 / 暴露变量：** 无（仅描述性分析）。
 
-**Control variables / covariates:**
+**控制变量 / 协变量：**
 
-| Variable name | Description | Rationale |
+| 变量名 | 描述 | 设置理由 |
 |---|---|---|
-| `region` | Geographic region (A/B/C/D) | Stratification variable |
-| `urban` | Urban/rural indicator (1/0) | Covariate for descriptive tables |
+| `region` | 地理地区（A/B/C/D） | 分层变量 |
+| `urban` | 城乡标识（1/0） | 描述性表格的协变量 |
 
 ---
 
-## 5. Sample Restrictions
+## 5. 样本限制
 
-| Restriction | Rationale |
+| 限制 | 理由 |
 |---|---|
-| Drop observations with missing `hhid` | Cannot link records without a valid ID |
-| Restrict to regions A, B, C (drop region D) | Region D is out of scope for this study |
+| 删除 `hhid` 缺失的观测 | 没有有效 ID 无法关联记录 |
+| 仅保留 A、B、C 地区（删除 D 地区） | D 地区不在本研究范围内 |
 
-**Expected sample size (after restrictions):** approximately 183 rows (from 200 raw)
+**预期样本量（限制后）：** 约 183 行（来自 200 行原始数据）
 
 ---
 
-## 6. Expected Outputs
+## 6. 预期产出
 
-| Output | Type | Script | Status |
+| 产出 | 类型 | 脚本 | 状态 |
 |---|---|---|---|
-| Table 1: Summary statistics by region | Table | `0.dofiles/table1.R` | `cc:todo` |
+| 表 1：分地区汇总统计 | 表格 | `0.dofiles/table1.R` | `cc:todo` |
 
 ---
 
-## 7. Open Questions
+## 7. 待解决问题
 
-None for this example.
+本示例中无。
 
 ---
 
-## 8. Approvals
+## 8. 审批
 
-| Decision | Approved by | Date |
+| 决策 | 审批人 | 日期 |
 |---|---|---|
-| Study specification v1 | Example (pre-approved) | 2026-05-29 |
+| 研究规格 v1 | 示例（已预先批准） | 2026-05-29 |

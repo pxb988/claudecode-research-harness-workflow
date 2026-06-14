@@ -1,120 +1,120 @@
-# Study Specification
+# 研究规格说明
 
-> This file is the research contract. It defines what is being studied, with what data, and how.
-> Changes to any field below require human approval before any analysis script is run.
-> Populate this file during `/research-harness-setup`. Leave fields as `unknown` if not yet determined.
-
----
-
-## 1. Research Question
-
-**Primary research question:**
-<!-- State the main empirical question in one or two sentences. -->
-unknown
-
-**Secondary questions (if any):**
-unknown
+> 本文件是研究契约，定义研究什么、用什么数据、如何研究。
+> 下文任一字段的改动，都需先经人工批准，才能运行任何分析脚本。
+> 在 `/research-harness-setup` 期间填写本文件。尚未确定的字段保留为 `unknown`。
 
 ---
 
-## 2. Identification Strategy
+## 1. 研究问题
 
-**Design type:**
-<!-- Choose one: cross-sectional, panel, DiD, IV, RD, experimental (RCT), synthetic control, event study, other -->
+**主要研究问题：**
+<!-- 用一两句话陈述核心实证问题。 -->
 unknown
 
-**Identification assumption:**
-<!-- State the key assumption in plain language. E.g., "parallel trends in the absence of treatment" for DiD. -->
-unknown
-
-**Identification strength:**
-<!-- Choose one: [descriptive] / [correlational] / [quasi-experimental: specify] / [experimental] -->
-unknown
-
-**Threats to identification:**
-<!-- List the main threats and whether they are addressed, partially addressed, or unresolved. -->
+**次要问题（如有）：**
 unknown
 
 ---
 
-## 3. Data
+## 2. 识别策略
 
-**Primary dataset:**
-- Path: `1.rawdata/`
-- File name(s): unknown
-- Data dictionary path: unknown
-- Unit of observation: unknown
-- Geographic coverage: unknown
-- Time coverage: unknown
-- Source: unknown
+**设计类型：**
+<!-- 任选其一：横截面、面板、DiD、IV、RD、实验（RCT）、合成控制、事件研究、其他 -->
+unknown
 
-**Secondary datasets (if any):**
+**识别假设：**
+<!-- 用平实语言陈述关键假设。例如 DiD 的「在不存在处理时的平行趋势」。 -->
+unknown
+
+**识别强度：**
+<!-- 任选其一：[descriptive] / [correlational] / [quasi-experimental: specify] / [experimental] -->
+unknown
+
+**对识别的威胁：**
+<!-- 列出主要威胁，以及它们是已解决、部分解决，还是未解决。 -->
+unknown
+
+---
+
+## 3. 数据
+
+**主要数据集：**
+- 路径：`1.rawdata/`
+- 文件名：unknown
+- 数据字典路径：unknown
+- 观测单位：unknown
+- 地理覆盖范围：unknown
+- 时间覆盖范围：unknown
+- 来源：unknown
+
+**次要数据集（如有）：**
 - unknown
 
 ---
 
-## 4. Variables
+## 4. 变量
 
-**Outcome variable(s):**
-| Variable name | Description | Source file | Units |
+**结果变量：**
+| 变量名 | 说明 | 源文件 | 单位 |
 |---|---|---|---|
 | unknown | | | |
 
-**Treatment / exposure variable(s):**
-| Variable name | Description | Source file | Units | Variation used |
+**处理 / 暴露变量：**
+| 变量名 | 说明 | 源文件 | 单位 | 使用的变异 |
 |---|---|---|---|---|
 | unknown | | | | |
 
-**Control variables / covariates:**
-| Variable name | Description | Rationale |
+**控制变量 / 协变量：**
+| 变量名 | 说明 | 理由 |
 |---|---|---|
 | unknown | | |
 
-**Instrumental variables (if any):**
-| Variable name | Description | Exclusion restriction justification |
+**工具变量（如有）：**
+| 变量名 | 说明 | 排他性约束论证 |
 |---|---|---|
 | unknown | | |
 
 ---
 
-## 5. Sample Restrictions
+## 5. 样本限制条件
 
-List all inclusion/exclusion criteria applied to the estimation sample. Changes to this list require human approval.
+列出应用于估计样本的全部纳入/排除标准。本清单的改动需经人工批准。
 
-| Restriction | Rationale |
+| 限制条件 | 理由 |
 |---|---|
 | unknown | |
 
-**Expected sample size (after restrictions):** unknown
+**预期样本量（应用限制条件后）：** unknown
 
 ---
 
-## 6. Expected Outputs
+## 6. 预期产出
 
-List all tables and figures that the final paper or report requires.
+列出最终论文或报告所需的全部表格和图形。
 
-| Output | Type | Script | Status |
+| 产出 | 类型 | 脚本 | 状态 |
 |---|---|---|---|
-| Table 1: Descriptive statistics | Table | `0.dofiles/table1.R` | `cc:todo` |
-| Table 2: Main regression results | Table | unknown | `cc:todo` |
-| Figure 1: unknown | Figure | unknown | `cc:todo` |
+| 表 1：描述性统计 | 表格 | `0.dofiles/table1.R` | `cc:todo` |
+| 表 2：主回归结果 | 表格 | unknown | `cc:todo` |
+| 图 1：unknown | 图形 | unknown | `cc:todo` |
 
 ---
 
-## 7. Open Questions and Unresolved Issues
+## 7. 待解问题与未决事项
 
-List anything not yet determined. Mark resolved items with the date resolved.
+列出尚未确定的事项。已解决的条目标注解决日期。
 
-| Question | Status | Date resolved |
+| 问题 | 状态 | 解决日期 |
 |---|---|---|
 | unknown | open | |
 
 ---
 
-## 8. Approvals
+## 8. 批准记录
 
-| Decision | Approved by | Date |
+| 决策 | 批准人 | 日期 |
 |---|---|---|
-| Study specification v1 | | |
-| Sample restriction changes | | |
-| Estimator or outcome changes | | |
+| 研究规格说明 v1 | | |
+| 样本限制条件变更 | | |
+| 估计量或结果变量变更 | | |

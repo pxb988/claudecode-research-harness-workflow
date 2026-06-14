@@ -111,17 +111,17 @@ Never invent output after a failure. Never continue as if the task completed whe
 After completing a task, add a row to the Evidence Ledger in `analysis_plan.md` and print:
 
 ```
-Task <task_id> — cc:done
+任务 <task_id> — cc:done
 
-Script:  <script_path>          [exists]
-Log:     <log_path>             [exists]
-Output:  <output_path>          [exists]
+脚本：  <script_path>          [exists]
+日志：  <log_path>             [exists]
+输出：  <output_path>          [exists]
 
-Key results (from log):
+关键结果（来自日志）：
   N = <value from log>
   <coefficient name> = <value from log>
   <p-value> = <value from log>
 
-Evidence row added to analysis_plan.md.
-Next: run /research-harness-work <next-task-id> or /research-harness-review
+已向 analysis_plan.md 添加证据行。
+下一步：运行 /research-harness-work <next-task-id> 或 /research-harness-review
 ```

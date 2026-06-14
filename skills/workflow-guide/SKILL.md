@@ -14,37 +14,37 @@ user-invocable: true
 effort: low
 ---
 
-# Workflow Guide — which skill, when
+# 工作流导航 —— 用哪个 skill、什么时候用
 
-Eight skills drive an empirical study. Pick by what you have and what you need next.
+八个 skill 驱动一项实证研究。按你「手上有什么、下一步要什么」来挑。
 
-## The seven-stage pipeline (full study)
+## 七阶段流水线（完整研究）
 
-| Stage | Skill | Use it when |
+| 阶段 | Skill | 在以下情形使用 |
 |---|---|---|
-| 1 | `/research-harness-setup` | Starting a project — create source-of-truth files, canonical layout, data protection |
-| 2 | `/research-harness-audit` | Raw data is in `1.rawdata/` — inspect variables, missingness, IDs, feasibility |
-| 3 | `/research-harness-clean` | Audit done — clean, recode, merge into an analysis-ready dataset |
-| 4 | `/research-harness-plan` | Data is ready — turn the study spec into a concrete analysis plan |
-| 5 | `/research-harness-work` | Plan approved — execute one analysis task (script → log → output) |
-| 6 | `/research-harness-review` | Results drafted — verify numbers, identification honesty, data protection |
-| 7 | `/research-harness-release` | Review = APPROVE — assemble the replication/evidence package |
+| 1 | `/research-harness-setup` | 开始一个项目 —— 创建权威来源文件、标准目录结构、数据保护 |
+| 2 | `/research-harness-audit` | 原始数据已放入 `1.rawdata/` —— 检查变量、缺失、ID、可行性 |
+| 3 | `/research-harness-clean` | 审计完成 —— 清洗、重编码、合并为可分析数据集 |
+| 4 | `/research-harness-plan` | 数据就绪 —— 把研究规格转成具体的分析计划 |
+| 5 | `/research-harness-work` | 计划已批准 —— 执行一个分析任务（脚本 → 日志 → 输出） |
+| 6 | `/research-harness-review` | 结果初稿完成 —— 核查数字、识别策略诚实性、数据保护 |
+| 7 | `/research-harness-release` | 审稿 = APPROVE —— 组装复现/证据包 |
 
-Run them in order for a full study. Each writes evidence to `4.reports/` and updates
-`analysis_plan.md`.
+完整研究按顺序运行。每一步都把证据写入 `4.reports/` 并更新
+`analysis_plan.md`。
 
-## The replication shortcut (standalone)
+## 复现捷径（独立使用）
 
-| Skill | Use it when |
+| Skill | 在以下情形使用 |
 |---|---|
-| `/research-harness-replicate` | You have a published paper + the raw panel and want just the paper's subsample. Reads raw metadata directly; no full clean needed. Validates your means against the paper's published targets. |
+| `/research-harness-replicate` | 你有一篇已发表的论文 + 原始面板，只想要论文用到的子样本。直接读原始元数据，无需完整清洗；并把你算出的均值与论文已发表的目标值做校验。 |
 
-## Knowledge that skills consult automatically
-- `docs/references/datasets/<id>.md` — per-dataset file-naming + variable-encoding gotchas.
-- `docs/references/replications/<paper>.md` — per-paper concept→variable map + target means.
-- `docs/survey-pipeline-engineering.md` — wide-panel memory/dtype engineering rules.
+## skill 会自动查阅的知识
+- `docs/references/datasets/<id>.md` —— 各数据集的文件命名 + 变量编码坑点。
+- `docs/references/replications/<paper>.md` —— 各论文的概念→变量映射 + 目标均值。
+- `docs/survey-pipeline-engineering.md` —— 宽面板的内存/dtype 工程规则。
 
-Adding a file + an `index.json` entry extends coverage with no skill change.
+新增一个文件 + 一条 `index.json` 记录即可扩展覆盖范围，无需改动 skill。
 
-## The one rule under all of them
-> **No script, no log, no claim.** Every number traces to a script run and a log on disk.
+## 贯穿所有 skill 的唯一铁律
+> **没有脚本，就没有日志；没有日志，就没有论断。** 每个数字都可追溯到一次脚本运行和磁盘上的日志。

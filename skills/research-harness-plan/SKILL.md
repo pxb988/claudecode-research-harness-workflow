@@ -114,21 +114,21 @@ If `analysis_plan.md` already exists and `--update` was not passed: ask the user
 Print a plan summary:
 
 ```
-Research Harness Plan — Draft Complete
+Research Harness Plan — 草案完成
 
-Tasks generated:
-  Stage 1 (Descriptive):    N tasks
-  Stage 2 (Main models):    N tasks
-  Stage 3 (Robustness):     N tasks
-  Stage 4 (Heterogeneity):  N tasks
-  Stage 5 (Figures/tables): N tasks
-  Blocked (missing data):   N tasks
+已生成任务：
+  阶段 1（描述性分析）：  N 个任务
+  阶段 2（主模型）：      N 个任务
+  阶段 3（稳健性检验）：  N 个任务
+  阶段 4（异质性分析）：  N 个任务
+  阶段 5（图与表）：      N 个任务
+  受阻（数据缺失）：      N 个任务
 
-Limitations: [count]
-Unresolved questions: [count]
+局限性：[count]
+待解决问题：[count]
 
-⚠ HUMAN APPROVAL REQUIRED before running /research-harness-work.
-Review analysis_plan.md and confirm the plan is correct before proceeding.
+⚠ 运行 /research-harness-work 前必须经人工批准。
+请检查 analysis_plan.md，确认计划无误后再继续。
 ```
 
 ## Forbidden Actions
@@ -161,8 +161,8 @@ Review analysis_plan.md and confirm the plan is correct before proceeding.
 
 Tell the user:
 
-> Review `analysis_plan.md`. When you are satisfied with the plan, approve it.
+> 检查 `analysis_plan.md`。对计划满意后，批准它。
 >
-> Then run `/research-harness-work 1.1` (or the task number you want to execute first).
+> 然后运行 `/research-harness-work 1.1`（或你想最先执行的任务编号）。
 >
-> Do not run `/research-harness-work` until you have reviewed and approved the plan.
+> 在你检查并批准计划之前，不要运行 `/research-harness-work`。

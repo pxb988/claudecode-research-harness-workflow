@@ -1,66 +1,66 @@
-# Examples — Research Agent Harness
+# 示例 —— Research Agent Harness
 
-Each example demonstrates one or more stages of the research harness workflow using synthetic data. No real data is used. All examples are self-contained stubs: they show the expected file structure, script patterns, and report formats without requiring external data sources.
+每个示例都用合成数据演示科研工作流的一个或多个阶段。不使用任何真实数据。所有示例都是自包含的桩示例：它们展示预期的文件结构、脚本范式与报告格式，而无需外部数据源。
 
 ---
 
-## Example Index
+## 示例索引
 
 ### 1. basic-data-cleaning
 
-**Learning objective:** Run `/research-harness-audit` and `/research-harness-clean` on a single synthetic CSV file.
+**学习目标：** 在单个合成 CSV 文件上运行 `/research-harness-audit` 与 `/research-harness-clean`。
 
-**Covers:**
-- Variable inspection and missingness reporting
-- Renaming and type conversion
-- Missing-value recoding
-- Observation filtering with documented drops
-- Saving a cleaned dataset to `3.outdata/data/`
-- Producing `data_audit_report.md` and `data_cleaning_report.md`
+**涵盖：**
+- 变量检查与缺失情况报告
+- 重命名与类型转换
+- 缺失值重编码
+- 带记录的观测过滤（每次丢弃都有据可查）
+- 把清洗后的数据集保存到 `3.outdata/data/`
+- 生成 `data_audit_report.md` 与 `data_cleaning_report.md`
 
-**Does not cover:** merging, econometric models, review, release.
+**不涵盖：** 合并、计量模型、审稿、发布。
 
-**Entry point:** `examples/basic-data-cleaning/README.md`
+**入口：** `examples/basic-data-cleaning/README.md`
 
 ---
 
 ### 2. econometrics-replication
 
-**Learning objective:** Run the full 7-stage workflow on a synthetic difference-in-differences dataset.
+**学习目标：** 在一个合成的双重差分（DiD）数据集上运行完整的 7 阶段工作流。
 
-**Covers:**
-- Study spec with a DiD identification strategy
-- Two-file merge (panel outcomes + policy timing), with full merge report
-- Descriptive statistics and pre-trend check
-- Main DiD regression with fixed effects
-- Robustness check (alternative control group)
-- Review: identification assessment, numerical verification
-- Replication package assembly
+**涵盖：**
+- 采用 DiD 识别策略的研究规格
+- 两文件合并（面板结果 + 政策时点），含完整合并报告
+- 描述性统计与预趋势检验
+- 带固定效应的主 DiD 回归
+- 稳健性检验（替换对照组）
+- 审稿：识别策略评估、数值核验
+- 复现包组装
 
-**Entry point:** `examples/econometrics-replication/README.md`
+**入口：** `examples/econometrics-replication/README.md`
 
 ---
 
-## How to use an example
+## 如何使用示例
 
 ```bash
-# Copy the example folder to a working directory
+# 把示例文件夹复制到一个工作目录
 cp -r examples/basic-data-cleaning /tmp/my-cleaning-test
 cd /tmp/my-cleaning-test
 
-# Start Claude Code and run the harness
+# 启动 Claude Code 并运行工作流
 claude
 /research-harness-audit
 /research-harness-clean
 ```
 
-Both examples use the **canonical project layout** (`0.dofiles/`, `1.rawdata/`,
-`2.workdata/`, `3.outdata/`, `4.reports/`) — the same layout `/research-harness-setup`
-generates. All paths in example scripts are relative to the example folder root.
+两个示例都使用**标准项目目录结构**（`0.dofiles/`、`1.rawdata/`、
+`2.workdata/`、`3.outdata/`、`4.reports/`）—— 与 `/research-harness-setup`
+生成的结构一致。示例脚本中的所有路径都相对于示例文件夹根目录。
 
 ---
 
-## Synthetic data notice
+## 合成数据声明
 
-All CSV files in these examples contain randomly generated data.
-They are designed to illustrate data structures only — the numbers are not meaningful.
+这些示例中的所有 CSV 文件都包含随机生成的数据。
+它们仅用于演示数据结构 —— 其中的数字没有实际含义。

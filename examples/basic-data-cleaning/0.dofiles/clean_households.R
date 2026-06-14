@@ -1,85 +1,85 @@
-# Study: Basic Data Cleaning Example
-# Task: data cleaning — households.csv
-# Date: 2026-05-29
-# Analyst: Claude Code
-# Description: Recode missing values, apply sample restrictions, generate derived variables.
-# Cleaning plan: 4.reports/data_cleaning_plan.md
+# 研究：基础数据清洗示例
+# 任务：数据清洗 — households.csv
+# 日期：2026-05-29
+# 分析师：Claude Code
+# 描述：重编码缺失值、施加样本限制、生成派生变量。
+# 清洗方案：4.reports/data_cleaning_plan.md
 # _fixture: synthetic — randomly generated demo data, not real survey microdata.
 
 library(here)
 
-# --- Open log ---
+# --- 打开日志 ---
 log_file <- here("0.dofiles", "logs", paste0("clean_", format(Sys.Date(), "%Y%m%d"), ".log"))
 dir.create(here("0.dofiles", "logs"), showWarnings = FALSE, recursive = TRUE)
 sink(log_file, append = FALSE, split = TRUE)
 
-cat("=== Data Cleaning Log ===\n")
-cat("Study:    Basic Data Cleaning Example\n")
-cat("Task:     clean_households\n")
-cat("Started: ", format(Sys.time()), "\n\n")
+cat("=== 数据清洗日志 ===\n")
+cat("研究：    基础数据清洗示例\n")
+cat("任务：    clean_households\n")
+cat("开始时间：", format(Sys.time()), "\n\n")
 
-# --- Load raw data ---
+# --- 载入原始数据 ---
 raw_path <- here("1.rawdata", "households.csv")
-cat("Loading:", raw_path, "\n")
+cat("正在载入：", raw_path, "\n")
 df <- read.csv(raw_path, stringsAsFactors = FALSE)
-cat("Loaded:", nrow(df), "rows,", ncol(df), "columns\n\n")
+cat("已载入：", nrow(df), "行，", ncol(df), "列\n\n")
 
-# --- Recode missing values ---
-# income_annual: -9 is the legacy missing code
+# --- 重编码缺失值 ---
+# income_annual：-9 是历史遗留的缺失值编码
 n_income_neg9 <- sum(df$income_annual == -9, na.rm = TRUE)
 df$income_annual[df$income_annual == -9] <- NA
-cat("Recoded income_annual: -9 -> NA for", n_income_neg9, "observations\n")
+cat("已将 income_annual 的 -9 重编码为 NA，共", n_income_neg9, "条观测\n")
 
-# hhid: blank/empty string -> NA
+# hhid：空白/空字符串 -> NA
 n_hhid_blank <- sum(is.na(df$hhid) | df$hhid == "", na.rm = TRUE)
 df$hhid[df$hhid == ""] <- NA
-cat("Found", n_hhid_blank, "observations with missing hhid\n\n")
+cat("发现", n_hhid_blank, "条 hhid 缺失的观测\n\n")
 
-# --- Sample restriction 1: Drop missing hhid ---
+# --- 样本限制 1：删除 hhid 缺失的观测 ---
 n_before <- nrow(df)
 df <- df[!is.na(df$hhid), ]
 n_dropped_id <- n_before - nrow(df)
-cat("Restriction 1 — Drop missing hhid:\n")
-cat("  Before:", n_before, "| Dropped:", n_dropped_id, "| After:", nrow(df), "\n\n")
+cat("限制 1 — 删除 hhid 缺失：\n")
+cat("  删除前：", n_before, "| 已删除：", n_dropped_id, "| 删除后：", nrow(df), "\n\n")
 
-# --- Sample restriction 2: Keep regions A, B, C only ---
+# --- 样本限制 2：仅保留 A、B、C 地区 ---
 n_before <- nrow(df)
 df <- df[df$region %in% c("A", "B", "C"), ]
 n_dropped_region <- n_before - nrow(df)
-cat("Restriction 2 — Keep regions A, B, C (drop D):\n")
-cat("  Before:", n_before, "| Dropped:", n_dropped_region, "| After:", nrow(df), "\n\n")
+cat("限制 2 — 仅保留 A、B、C 地区（删除 D）：\n")
+cat("  删除前：", n_before, "| 已删除：", n_dropped_region, "| 删除后：", nrow(df), "\n\n")
 
-# --- Derived variable: hh_size_flag ---
+# --- 派生变量：hh_size_flag ---
 df$hh_size_flag <- as.integer(df$hh_size > 15)
 n_flagged <- sum(df$hh_size_flag)
-cat("Derived variable hh_size_flag (hh_size > 15):", n_flagged, "households flagged\n")
+cat("派生变量 hh_size_flag（hh_size > 15）：", n_flagged, "户被标记\n")
 
-# --- Derived variable: income_missing ---
+# --- 派生变量：income_missing ---
 df$income_missing <- as.integer(is.na(df$income_annual))
 n_income_missing <- sum(df$income_missing)
-cat("Derived variable income_missing:", n_income_missing, "observations with missing income\n\n")
+cat("派生变量 income_missing：", n_income_missing, "条收入缺失的观测\n\n")
 
-# --- Final checks ---
-cat("=== Final dataset summary ===\n")
-cat("Rows:   ", nrow(df), "\n")
-cat("Columns:", ncol(df), "\n")
-cat("Regions:", paste(sort(unique(df$region)), collapse = ", "), "\n")
-cat("Income missing:", sum(is.na(df$income_annual)), "\n")
-cat("HH size flagged:", sum(df$hh_size_flag), "\n\n")
+# --- 最终检查 ---
+cat("=== 最终数据集摘要 ===\n")
+cat("行数：  ", nrow(df), "\n")
+cat("列数：", ncol(df), "\n")
+cat("地区：", paste(sort(unique(df$region)), collapse = ", "), "\n")
+cat("收入缺失：", sum(is.na(df$income_annual)), "\n")
+cat("家庭规模被标记：", sum(df$hh_size_flag), "\n\n")
 
 if (anyDuplicated(df$hhid)) {
-  cat("ERROR: Duplicate hhid values found — cleaning failed.\n")
+  cat("错误：发现重复的 hhid 值——清洗失败。\n")
   sink()
   quit(status = 1)
 }
-cat("ID check: no duplicate hhid values — PASS\n\n")
+cat("ID 检查：无重复 hhid 值 — PASS\n\n")
 
-# --- Save output ---
+# --- 保存输出 ---
 dir.create(here("3.outdata", "data"), showWarnings = FALSE, recursive = TRUE)
 out_path <- here("3.outdata", "data", "households_clean.csv")
 write.csv(df, out_path, row.names = FALSE)
-cat("Saved:", out_path, "\n")
+cat("已保存：", out_path, "\n")
 
-cat("\nFinished:", format(Sys.time()), "\n")
-cat("Exit: 0 (success)\n")
+cat("\n完成时间：", format(Sys.time()), "\n")
+cat("退出：0（成功）\n")
 sink()

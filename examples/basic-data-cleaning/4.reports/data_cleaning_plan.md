@@ -1,123 +1,123 @@
-# Data Cleaning Plan — Basic Data Cleaning Example
+# 数据清洗方案 — 基础数据清洗示例
 
 ---
 
-## Plan Metadata
+## 方案元信息
 
-- **Study spec:** `study_spec.md`
-- **Audit report:** `4.reports/data_audit_report.md` (to be generated)
-- **Date:** 2026-05-29
-- **Analyst:** Claude Code
+- **研究规格：** `study_spec.md`
+- **审计报告：** `4.reports/data_audit_report.md`（待生成）
+- **日期：** 2026-05-29
+- **分析师：** Claude Code
 
 ---
 
-## 1. Source Files
+## 1. 源文件
 
-| File | Path | Row count (from audit) | Description |
+| 文件 | 路径 | 行数（来自审计） | 描述 |
 |---|---|---|---|
-| households.csv | `1.rawdata/households.csv` | 200 | Synthetic household survey |
+| households.csv | `1.rawdata/households.csv` | 200 | 合成家庭调查 |
 
 ---
 
-## 2. Target Outputs
+## 2. 目标产出
 
-| Output file | Path | Description |
+| 产出文件 | 路径 | 描述 |
 |---|---|---|
-| households_clean.csv | `3.outdata/data/households_clean.csv` | Analysis-ready household dataset |
+| households_clean.csv | `3.outdata/data/households_clean.csv` | 可直接分析的家庭数据集 |
 
-**Final analysis-ready dataset:** `3.outdata/data/households_clean.csv`
-
----
-
-## 3. Variable Cleaning Tasks
-
-### 3.1 Variable Renaming
-
-None required — variable names are already clean.
-
-### 3.2 Type Conversions
-
-| Variable | Current type | Target type | Notes |
-|---|---|---|---|
-| `hhid` | character/integer | character | Keep as string ID |
-| `urban` | integer | factor/logical | 1 = urban, 0 = rural |
-| `survey_year` | integer | integer | No change needed |
-
-### 3.3 Date Parsing
-
-No date variables in this dataset.
-
-### 3.4 Missing Value Coding
-
-| Variable | Current missing code | Standard missing code | Notes |
-|---|---|---|---|
-| `income_annual` | `-9` | `NA` | Recode -9 to NA; log count affected |
-| `hhid` | empty string / blank | `NA` | Already blank in CSV; drop these rows (see §4) |
-
-### 3.5 Duplicate Checks
-
-| Level | ID variable | Expected duplicates | Action if found |
-|---|---|---|---|
-| Household | `hhid` | 0 | Stop and report |
-
-### 3.6 ID Consistency Checks
-
-No cross-file merge in this example — single file only.
-
-### 3.7 Unit Harmonization
-
-`income_annual` is already in consistent units (local currency). No conversion needed.
-
-### 3.8 Winsorization / Outlier Flags
-
-Flag households with `hh_size > 15` as `hh_size_flag = 1` but do NOT drop them or winsorize.
-Document the count of flagged observations in the cleaning report.
-
-### 3.9 Reshaping
-
-Not applicable — data is already at the household level.
+**最终可分析数据集：** `3.outdata/data/households_clean.csv`
 
 ---
 
-## 4. Sample Restrictions
+## 3. 变量清洗任务
 
-| Filter | Condition | Expected obs dropped | Documented reason |
+### 3.1 变量重命名
+
+无需重命名——变量名已经规范。
+
+### 3.2 类型转换
+
+| 变量 | 当前类型 | 目标类型 | 备注 |
 |---|---|---|---|
-| Drop missing ID | `is.na(hhid)` | 8 | Cannot link records without valid household ID |
-| Restrict to regions A, B, C | `region %in% c("A","B","C")` | 9 | Region D is out of scope per study_spec.md §5 |
+| `hhid` | character/integer | character | 保留为字符串 ID |
+| `urban` | integer | factor/logical | 1 = 城镇，0 = 农村 |
+| `survey_year` | integer | integer | 无需改动 |
 
-**Total expected drops:** 17
-**Expected final N:** 183
+### 3.3 日期解析
 
----
+本数据集中没有日期变量。
 
-## 5. Merge Tasks
+### 3.4 缺失值编码
 
-None — single source file.
-
----
-
-## 6. Derived Variables
-
-| Variable name | Formula | Source variables | Rationale |
+| 变量 | 当前缺失码 | 标准缺失码 | 备注 |
 |---|---|---|---|
-| `hh_size_flag` | `hh_size > 15` → 1, else 0 | `hh_size` | Flag outlier household sizes for sensitivity check |
-| `income_missing` | `is.na(income_annual)` → 1, else 0 | `income_annual` | Indicator for income missingness (after recoding -9 to NA) |
+| `income_annual` | `-9` | `NA` | 将 -9 重编码为 NA；记录受影响的数量 |
+| `hhid` | 空字符串 / 空白 | `NA` | CSV 中已为空白；删除这些行（见 §4） |
+
+### 3.5 重复值检查
+
+| 层级 | ID 变量 | 预期重复数 | 发现后的处理 |
+|---|---|---|---|
+| 家庭 | `hhid` | 0 | 停止并报告 |
+
+### 3.6 ID 一致性检查
+
+本示例无跨文件合并——仅单一文件。
+
+### 3.7 单位统一
+
+`income_annual` 已采用一致的单位（本地货币），无需转换。
+
+### 3.8 缩尾 / 异常值标记
+
+将 `hh_size > 15` 的家庭标记为 `hh_size_flag = 1`，但不删除、也不缩尾。
+在清洗报告中记录被标记观测的数量。
+
+### 3.9 重塑
+
+不适用——数据已经在家庭层级。
 
 ---
 
-## 7. Final Dataset Specification
+## 4. 样本限制
 
-| Property | Value |
+| 过滤 | 条件 | 预期删除观测数 | 记录理由 |
+|---|---|---|---|
+| 删除缺失 ID | `is.na(hhid)` | 8 | 没有有效家庭 ID 无法关联记录 |
+| 仅保留 A、B、C 地区 | `region %in% c("A","B","C")` | 9 | 按 study_spec.md §5，D 地区不在研究范围内 |
+
+**预期删除总数：** 17
+**预期最终 N：** 183
+
+---
+
+## 5. 合并任务
+
+无——单一源文件。
+
+---
+
+## 6. 派生变量
+
+| 变量名 | 公式 | 源变量 | 设置理由 |
+|---|---|---|---|
+| `hh_size_flag` | `hh_size > 15` → 1，否则 0 | `hh_size` | 标记异常家庭规模，供敏感性检验 |
+| `income_missing` | `is.na(income_annual)` → 1，否则 0 | `income_annual` | 收入缺失的指示变量（在将 -9 重编码为 NA 之后） |
+
+---
+
+## 7. 最终数据集规格
+
+| 属性 | 取值 |
 |---|---|
-| File path | `3.outdata/data/households_clean.csv` |
-| Unit of observation | Household |
-| Expected row count | 183 |
-| Expected column count | 8 (original 6 + hh_size_flag + income_missing) |
-| ID variable | `hhid` |
+| 文件路径 | `3.outdata/data/households_clean.csv` |
+| 观测单位 | 家庭 |
+| 预期行数 | 183 |
+| 预期列数 | 8（原始 6 列 + hh_size_flag + income_missing） |
+| ID 变量 | `hhid` |
 
 ---
 
-## 8. Open Questions Before Cleaning Starts
+## 8. 清洗开始前的待解决问题
 
-None.
+无。

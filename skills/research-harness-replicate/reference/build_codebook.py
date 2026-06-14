@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-# build_codebook.py — Stage 3: read the subsample, compute per-variable stats, attach
-# the paper's PUBLISHED target means, and flag mean_match (CLOSE/MODERATE/DIFFERS).
+# build_codebook.py — 阶段 3：读取子样本，逐变量计算统计量，附上论文「已发表」的
+# 目标均值，并标记 mean_match（CLOSE/MODERATE/DIFFERS）。
 import sys, os, csv
 try:
     import pandas as pd
 except ImportError:
-    sys.exit("pandas required")
+    sys.exit("需要 pandas")
 
 SUBSAMPLE = "3.outdata/data/_11_subsample.csv"
 OUT = "3.outdata/data/_12_codebook.csv"
 
-# Fill from the paper's Table 2 (published values only — never your own achieved runs):
-PAPER_TARGETS = {}  # e.g. {"EDUCATION": 0.534, "MARITAL": 0.074}
+# 从论文 Table 2 填入（只用已发表的值 —— 绝不用你自己跑出来的结果）：
+PAPER_TARGETS = {}  # 例如 {"EDUCATION": 0.534, "MARITAL": 0.074}
 
 def classify(diff):
     if diff < 0.02: return "CLOSE"
@@ -26,9 +26,9 @@ def main():
         for var, target in PAPER_TARGETS.items():
             our = float(df[var].mean())
             label = classify(abs(our - target))
-            note = "" if label != "DIFFERS" else "EXPLAIN before regression-ready"
+            note = "" if label != "DIFFERS" else "需在进入回归前说明原因"
             w.writerow([var, "%.3f" % our, "%.3f" % target, label, note])
-    print("build_codebook: wrote %s (%d vars)" % (OUT, len(PAPER_TARGETS)))
+    print("build_codebook：已写入 %s（%d 个变量）" % (OUT, len(PAPER_TARGETS)))
 
 if __name__ == "__main__":
     main()

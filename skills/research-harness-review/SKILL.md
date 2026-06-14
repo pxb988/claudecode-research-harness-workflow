@@ -134,32 +134,32 @@ Copy `${CLAUDE_PLUGIN_ROOT}/templates/review_report.md` to `4.reports/review_rep
 Print a review summary:
 
 ```
-Research Harness Review — Complete
+Research Harness Review — 完成
 
-Tasks reviewed: N
-Scope: [task IDs]
+已审稿任务数：N
+范围：[task IDs]
 
-Identification credibility: strong / moderate / weak / insufficient
-Numerical accuracy: all verified / N unverified
-Causal claims: all appropriate / N overstated
+识别可信度：strong / moderate / weak / insufficient
+数值准确性：all verified / N unverified
+因果论断：all appropriate / N overstated
 
-Critical findings: N
-Major findings: N
-Minor findings: N
+关键发现：N
+重要发现：N
+次要发现：N
 
-Verdict: APPROVE / REQUEST_CHANGES / BLOCK
+结论：APPROVE / REQUEST_CHANGES / BLOCK
 
-Review report: 4.reports/review_report.md
+审稿报告：4.reports/review_report.md
 ```
 
 If verdict is `REQUEST_CHANGES` or `BLOCK`:
 
 ```
-Required actions before /research-harness-release:
-1. [Finding 1 — required action]
-2. [Finding 2 — required action]
+运行 /research-harness-release 前必须完成的整改：
+1. [发现 1 — 所需整改动作]
+2. [发现 2 — 所需整改动作]
 
-Return to /research-harness-work to re-execute affected tasks, then re-run /research-harness-review.
+返回 /research-harness-work 重新执行受影响的任务，然后重新运行 /research-harness-review。
 ```
 
 ## Forbidden Actions
@@ -192,10 +192,10 @@ Return to /research-harness-work to re-execute affected tasks, then re-run /rese
 
 If verdict is `APPROVE`:
 
-> Review passed. Run `/research-harness-release` to package the replication archive.
+> 审稿通过。运行 `/research-harness-release` 打包复现归档。
 
 If verdict is `REQUEST_CHANGES` or `BLOCK`:
 
-> Return to `/research-harness-work` to resolve the findings listed in `4.reports/review_report.md`.
-> After re-executing affected tasks, run `/research-harness-review` again.
-> Do not run `/research-harness-release` until the verdict is `APPROVE`.
+> 返回 `/research-harness-work`，解决 `4.reports/review_report.md` 中列出的问题。
+> 重新执行受影响的任务后，再次运行 `/research-harness-review`。
+> 在结论变为 `APPROVE` 之前，不要运行 `/research-harness-release`。

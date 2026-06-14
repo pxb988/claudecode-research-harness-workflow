@@ -74,38 +74,38 @@ Script requirements:
 
 **R template for regression task:**
 ```r
-# Study: <study name>
-# Task: <task-id> — <task description>
-# Identification: <tag from study_spec.md>
-# Date: YYYY-MM-DD
-# Analyst: Claude Code
+# 研究：<study name>
+# 任务：<task-id> — <task description>
+# 识别策略：<tag from study_spec.md>
+# 日期：YYYY-MM-DD
+# 分析者：Claude Code
 
 library(here)
 
 log_file <- here("0.dofiles", "logs", "<task>.log")
 sink(log_file, append = FALSE, split = TRUE)
 
-cat("Task:", "<task-id>", "\n")
-cat("Started:", format(Sys.time()), "\n\n")
+cat("任务：", "<task-id>", "\n")
+cat("开始时间：", format(Sys.time()), "\n\n")
 
-# Load
+# 载入数据
 df <- read.csv(here("3.outdata", "data", "analysis_ready.csv"))
-cat("Loaded:", nrow(df), "rows\n")
+cat("已载入：", nrow(df), "行\n")
 
-# Sample restriction (if task-specific)
+# 样本限制（如该任务特有）
 n_before <- nrow(df)
 df <- df[<restriction>, ]
-cat("After restriction:", nrow(df), "rows (dropped:", n_before - nrow(df), ")\n")
+cat("限制后：", nrow(df), "行（丢弃：", n_before - nrow(df), "）\n")
 
-# Model
+# 模型
 fit <- lm(<formula>, data = df)
-cat("\n=== Results ===\n")
+cat("\n=== 回归结果 ===\n")
 print(summary(fit))
 
-# Save output
+# 保存输出
 write.csv(broom::tidy(fit), here("3.outdata", "tables", "<task>.csv"), row.names = FALSE)
-cat("\nOutput written to: 3.outdata/tables/<task>.csv\n")
-cat("Finished:", format(Sys.time()), "\n")
+cat("\n输出已写入：3.outdata/tables/<task>.csv\n")
+cat("完成时间：", format(Sys.time()), "\n")
 sink()
 ```
 
@@ -147,18 +147,18 @@ Mark the task status `cc:done`.
 Print a task completion summary:
 
 ```
-Task 1.1 — Complete
+任务 1.1 — 完成
 
-Script:  0.dofiles/table1.R
-Log:     0.dofiles/logs/table1.log   [exists: YES]
-Output:  3.outdata/tables/table1.csv               [exists: YES]
-Status:  cc:done
+脚本：  0.dofiles/table1.R
+日志：  0.dofiles/logs/table1.log   [存在: YES]
+输出：  3.outdata/tables/table1.csv               [存在: YES]
+状态：  cc:done
 
-Key results from log:
+日志中的关键结果：
   N = <value from log>
-  [other key stats from log]
+  [日志中的其他关键统计量]
 
-Next task: 1.2 or run /research-harness-work 1.2
+下一个任务：1.2，或运行 /research-harness-work 1.2
 ```
 
 Do not paraphrase or interpret the results. Quote them from the log.
@@ -210,6 +210,6 @@ Do not invent output, use estimated values, or continue as if the task completed
 
 After all approved tasks are complete:
 
-> All requested tasks are done. Review `analysis_plan.md` to confirm all expected tasks are `cc:done`.
+> 所有请求的任务都已完成。检查 `analysis_plan.md`，确认所有预期任务都是 `cc:done`。
 >
-> When ready, run `/research-harness-review` to check identification, numerical accuracy, and causal claims before release.
+> 准备就绪后，运行 `/research-harness-review`，在发布前核查识别策略、数值准确性与因果论断。

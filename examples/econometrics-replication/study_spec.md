@@ -1,110 +1,110 @@
-# Study Specification — Econometrics Replication Example
+# 研究规格 — 计量经济学复制示例
 
 ---
 
-## 1. Research Question
+## 1. 研究问题
 
-**Primary research question:**
-Did the regional job-training program increase household annual income, and by how much?
+**主研究问题：**
+区域职业培训项目是否提高了家庭年收入？提高了多少？
 
-**Secondary questions:**
-- Are effects larger for urban households?
-- Is the effect robust to excluding early-adopter regions?
-
----
-
-## 2. Identification Strategy
-
-**Design type:** Staggered difference-in-differences
-
-**Identification assumption:**
-In the absence of the job-training program, treated and control regions would have followed parallel income trends.
-
-**Identification strength:** `[quasi-experimental: DiD]`
-
-**Threats to identification:**
-- Differential pre-trends by region: partially tested via pre-trend check (Task 1.2)
-- Anticipation effects: assumed absent; not directly testable with this data
-- Compositional changes in treated regions: unresolved — noted as limitation
+**次要问题：**
+- 城镇家庭的效应是否更大？
+- 排除早期采纳地区后，效应是否依然稳健？
 
 ---
 
-## 3. Data
+## 2. 识别策略
 
-**Primary dataset:**
-- Path: `1.rawdata/`
-- File name(s): `panel_outcomes.csv`, `policy_timing.csv`
-- Data dictionary: see §4 below
-- Unit of observation: household × year
-- Geographic coverage: 4 synthetic regions (A, B, C, D)
-- Time coverage: 2018–2022 (5 years)
-- Source: synthetically generated for demonstration
+**设计类型：** 交错双重差分（Staggered difference-in-differences）
+
+**识别假设：**
+在没有职业培训项目的情形下，处理组与控制组地区的收入趋势将保持平行。
+
+**识别强度：** `[quasi-experimental: DiD]`
+
+**识别面临的威胁：**
+- 分地区的差异性事前趋势：通过事前趋势检验（任务 1.2）部分检验
+- 预期效应：假设不存在；以本数据无法直接检验
+- 处理组地区的构成变化：未解决——已列为局限
 
 ---
 
-## 4. Variables
+## 3. 数据
 
-**Outcome variable(s):**
+**主数据集：**
+- 路径：`1.rawdata/`
+- 文件名：`panel_outcomes.csv`、`policy_timing.csv`
+- 数据字典：见下文 §4
+- 观测单位：家庭 × 年份
+- 地理覆盖：4 个合成地区（A、B、C、D）
+- 时间覆盖：2018–2022（5 年）
+- 来源：为演示而合成生成
 
-| Variable name | Description | Source file | Units |
+---
+
+## 4. 变量
+
+**结果变量：**
+
+| 变量名 | 描述 | 来源文件 | 单位 |
 |---|---|---|---|
-| `income_annual` | Annual household income | `panel_outcomes.csv` | local currency units |
+| `income_annual` | 家庭年收入 | `panel_outcomes.csv` | 本地货币单位 |
 
-**Treatment / exposure variable(s):**
+**处理 / 暴露变量：**
 
-| Variable name | Description | Source file | Units | Variation used |
+| 变量名 | 描述 | 来源文件 | 单位 | 所用变异 |
 |---|---|---|---|---|
-| `policy_active` | Job-training program active in region × year | `policy_timing.csv` | 0/1 | Region × year rollout |
+| `policy_active` | 职业培训项目在 地区 × 年份 上是否启用 | `policy_timing.csv` | 0/1 | 地区 × 年份 的推行 |
 
-**Control variables / covariates:**
+**控制变量 / 协变量：**
 
-| Variable name | Description | Rationale |
+| 变量名 | 描述 | 设置理由 |
 |---|---|---|
-| `urban` | Urban/rural indicator | Controls for urban–rural income differential |
-| `hh_size` | Household size | Controls for household composition |
+| `urban` | 城乡标识 | 控制城乡收入差异 |
+| `hh_size` | 家庭规模 | 控制家庭构成 |
 
-**Derived variables (post-merge):**
+**派生变量（合并后）：**
 
-| Variable name | Formula | Rationale |
+| 变量名 | 公式 | 设置理由 |
 |---|---|---|
-| `treated` | `policy_active == 1` | Binary treatment indicator |
-| `post` | `year >= treat_year` (where applicable) | Post-treatment period indicator |
+| `treated` | `policy_active == 1` | 二值处理指示变量 |
+| `post` | `year >= treat_year`（适用时） | 处理后时期指示变量 |
 
 ---
 
-## 5. Sample Restrictions
+## 5. 样本限制
 
-| Restriction | Rationale |
+| 限制 | 理由 |
 |---|---|
-| Keep years 2018–2022 | Full panel; no restriction needed |
-| Drop observations with missing `income_annual` | Outcome must be observed |
+| 保留 2018–2022 年 | 完整面板；无需限制 |
+| 删除 `income_annual` 缺失的观测 | 结果变量必须可观测 |
 
-**Expected sample size (after restrictions):** approximately 580 household-year observations
+**预期样本量（限制后）：** 约 580 个家庭-年观测
 
 ---
 
-## 6. Expected Outputs
+## 6. 预期产出
 
-| Output | Type | Script | Status |
+| 产出 | 类型 | 脚本 | 状态 |
 |---|---|---|---|
-| Table 1: Descriptive statistics | Table | `0.dofiles/analysis_descriptive.R` | `cc:todo` |
-| Figure 1: Pre-trend plot | Figure | `0.dofiles/analysis_descriptive.R` | `cc:todo` |
-| Table 2: Main DiD results | Table | `0.dofiles/analysis_main_did.R` | `cc:todo` |
-| Table 3: Robustness — no early adopters | Table | `0.dofiles/analysis_robustness.R` | `cc:todo` |
+| 表 1：描述性统计 | 表格 | `0.dofiles/analysis_descriptive.R` | `cc:todo` |
+| 图 1：事前趋势图 | 图 | `0.dofiles/analysis_descriptive.R` | `cc:todo` |
+| 表 2：主 DiD 结果 | 表格 | `0.dofiles/analysis_main_did.R` | `cc:todo` |
+| 表 3：稳健性 — 排除早期采纳者 | 表格 | `0.dofiles/analysis_robustness.R` | `cc:todo` |
 
 ---
 
-## 7. Open Questions
+## 7. 待解决问题
 
-| Question | Status |
+| 问题 | 状态 |
 |---|---|
-| Whether to use region FE only or region + year FE | resolved: use two-way FE (region + year) |
-| How to handle compositional changes | open — document as limitation |
+| 仅用地区 FE 还是 地区 + 年份 FE | 已解决：使用双向 FE（地区 + 年份） |
+| 如何处理构成变化 | 待定——列为局限 |
 
 ---
 
-## 8. Approvals
+## 8. 审批
 
-| Decision | Approved by | Date |
+| 决策 | 审批人 | 日期 |
 |---|---|---|
-| Study specification v1 | Example (pre-approved) | 2026-05-29 |
+| 研究规格 v1 | 示例（已预先批准） | 2026-05-29 |

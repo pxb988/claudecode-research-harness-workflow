@@ -75,55 +75,55 @@ For each artifact, record whether the file exists on disk. Flag missing files as
 Print the full artifact inventory:
 
 ```
-Research Harness Release — Confirmation Required
+Research Harness Release — 需要确认
 
-Review verdict: APPROVE
-Review report: 4.reports/review_report.md
+审稿结论：APPROVE
+审稿报告：4.reports/review_report.md
 
-Artifacts to include:
+将纳入的产物：
 
-  Source-of-truth:
+  权威来源文件：
     [x] study_spec.md
     [x] analysis_plan.md
 
-  Reports:
+  报告：
     [x] 4.reports/data_audit_report.md
     [x] 4.reports/data_cleaning_report.md
     [x] 4.reports/merge_report.md
     [x] 4.reports/review_report.md
 
-  Scripts (N files):
+  脚本（N 个文件）：
     [x] 0.dofiles/clean.R
     [x] 0.dofiles/main_regression.R
     ...
 
-  Logs (N files):
+  日志（N 个文件）：
     [x] 0.dofiles/logs/clean_YYYYMMDD.log
     [x] 0.dofiles/logs/main_regression.log
     ...
 
-  Outputs (N files):
+  输出（N 个文件）：
     [x] 3.outdata/tables/table1.csv
     [x] 3.outdata/tables/table2.csv
     [x] 3.outdata/figures/figure1.pdf
     ...
 
-  Cleaned data:
+  清洗后的数据：
     [x] 3.outdata/data/analysis_ready.csv    [included / excluded with --no-data]
 
-Gaps (files listed in analysis_plan.md but not found on disk):
+缺口（在 analysis_plan.md 中列出但磁盘上未找到的文件）：
   [list or "none"]
 
-Data access note:
-  [If --no-data: "Processed data excluded. Add access instructions to reproducibility_report.md."]
-  [If data included: "Processed data included. Confirm you have permission to share this data."]
+数据访问说明：
+  [若 --no-data：「已排除处理后的数据。在 reproducibility_report.md 中补充获取说明。」]
+  [若包含数据：「已包含处理后的数据。请确认你有权分享这些数据。」]
 
-Proceed with release? (yes / no)
+是否继续发布？（yes / no）
 ```
 
 **Wait for user confirmation. Do not proceed without it.**
 
-If the user says no: stop. Print: "Release cancelled. No files were packaged."
+If the user says no: stop. Print: "已取消发布。未打包任何文件。"
 
 ### Step 3 — Write reproducibility_report.md
 
@@ -206,19 +206,19 @@ After copying:
 ### Step 6 — Print release summary
 
 ```
-Research Harness Release — Complete
+Research Harness Release — 完成
 
-Package location: release/
-Total files: N
-Verified claims: N
-Unverified items: N (see 4.reports/reproducibility_report.md §7)
+包位置：release/
+文件总数：N
+已验证的论断：N
+未经验证的事项：N（见 4.reports/reproducibility_report.md §7）
 
-⚠ Before sharing this package:
-  - Confirm you have permission to share any data files included
-  - Confirm 1.rawdata/ contents are not in release/ (unless intended)
-  - Test reproduction instructions on a clean environment if possible
+⚠ 分享此包之前：
+  - 确认你有权分享其中包含的任何数据文件
+  - 确认 1.rawdata/ 的内容不在 release/ 中（除非有意为之）
+  - 如有条件，在干净环境中测试复现说明
 
-Reproducibility report: release/4.reports/reproducibility_report.md
+可复现性报告：release/4.reports/reproducibility_report.md
 ```
 
 ## Forbidden Actions

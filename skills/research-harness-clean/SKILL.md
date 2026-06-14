@@ -72,10 +72,10 @@ Script requirements:
 
 **R skeleton:**
 ```r
-# Project: <study name>
-# Task: data cleaning
-# Date: YYYY-MM-DD
-# Analyst: Claude Code
+# 项目：<study name>
+# 任务：数据清洗
+# 日期：YYYY-MM-DD
+# 分析者：Claude Code
 
 library(here)
 library(dplyr)
@@ -83,41 +83,41 @@ library(dplyr)
 log_file <- here("0.dofiles", "logs", "clean_YYYYMMDD.log")
 sink(log_file, append = FALSE, split = TRUE)
 
-cat("=== Data Cleaning Log ===\n")
-cat("Started:", format(Sys.time()), "\n\n")
+cat("=== 数据清洗日志 ===\n")
+cat("开始时间：", format(Sys.time()), "\n\n")
 
-# --- Load ---
+# --- 载入数据 ---
 df <- read.csv(here("1.rawdata", "filename.csv"))
-cat("Loaded:", nrow(df), "rows\n")
+cat("已载入：", nrow(df), "行\n")
 
-# --- Filter ---
+# --- 筛选 ---
 n_before <- nrow(df)
 df <- df |> filter(...)
-cat("Dropped:", n_before - nrow(df), "rows —", "reason\n")
-cat("Remaining:", nrow(df), "rows\n")
+cat("丢弃：", n_before - nrow(df), "行 —", "原因\n")
+cat("剩余：", nrow(df), "行\n")
 
-# --- Save ---
+# --- 保存 ---
 write.csv(df, here("3.outdata", "data", "analysis_ready.csv"), row.names = FALSE)
-cat("\nFinished:", format(Sys.time()), "\n")
+cat("\n完成时间：", format(Sys.time()), "\n")
 sink()
 ```
 
 **Stata skeleton:**
 ```stata
-* Project: <study name>
-* Task: data cleaning
-* Date: YYYY-MM-DD
-* Analyst: Claude Code
+* 项目：<study name>
+* 任务：数据清洗
+* 日期：YYYY-MM-DD
+* 分析者：Claude Code
 
 log using "0.dofiles/logs/clean_YYYYMMDD.log", replace text
 
 use "1.rawdata/filename.dta", clear
-display "Loaded: `c(N)' rows"
+display "已载入：`c(N)' 行"
 
-* Filter
+* 筛选
 count
 keep if ...
-display "Remaining after filter: `c(N)'"
+display "筛选后剩余：`c(N)' 行"
 
 save "3.outdata/data/analysis_ready.dta", replace
 log close
@@ -235,8 +235,8 @@ All of these must be present:
 
 Tell the user:
 
-> Cleaning complete. Review `4.reports/data_cleaning_report.md` and `4.reports/merge_report.md`.
+> 清洗完成。检查 `4.reports/data_cleaning_report.md` 与 `4.reports/merge_report.md`。
 >
-> If any merge had unresolved problems: resolve them before continuing.
+> 若任何一次合并存在未解决的问题：先解决再继续。
 >
-> When satisfied with the cleaned data, run `/research-harness-plan` to generate the executable analysis plan.
+> 对清洗后的数据满意后，运行 `/research-harness-plan` 生成可执行的分析计划。

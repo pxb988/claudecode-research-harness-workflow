@@ -1,149 +1,149 @@
-# Data Cleaning Plan
+# 数据清洗计划
 
-> Fill this template before running `/research-harness-clean`.
-> The Analyst reads this file to generate and run cleaning scripts.
-> Every cleaning decision listed here must appear in the cleaning report after the scripts run.
-
----
-
-## Plan Metadata
-
-- **Study spec:** `study_spec.md`
-- **Audit report:** `4.reports/data_audit_report.md`
-- **Date:** YYYY-MM-DD
-- **Analyst:** Claude Code
+> 在运行 `/research-harness-clean` 之前填写本模板。
+> 分析者读取本文件以生成并运行清洗脚本。
+> 此处列出的每一项清洗决策，都必须在脚本运行后出现在清洗报告中。
 
 ---
 
-## 1. Source Files
+## 计划元信息
 
-All source files must be in `1.rawdata/`. List every file this cleaning task reads.
+- **研究规格说明：** `study_spec.md`
+- **审计报告：** `4.reports/data_audit_report.md`
+- **日期：** YYYY-MM-DD
+- **分析者：** Claude Code
 
-| File | Path | Row count (from audit) | Description |
+---
+
+## 1. 源文件
+
+所有源文件必须位于 `1.rawdata/`。列出本次清洗任务读取的每个文件。
+
+| 文件 | 路径 | 行数（来自审计） | 说明 |
 |---|---|---|---|
 | | `1.rawdata/` | | |
 
 ---
 
-## 2. Target Outputs
+## 2. 目标产出
 
-All output files must go to `3.outdata/data/` or `2.workdata/`. No output may overwrite `1.rawdata/`.
+所有产出文件必须写入 `3.outdata/data/` 或 `2.workdata/`。任何产出都不得覆盖 `1.rawdata/`。
 
-| Output file | Path | Description | Replaces |
+| 产出文件 | 路径 | 说明 | 替换对象 |
 |---|---|---|---|
 | | `3.outdata/data/` | | |
 
-**Final analysis-ready dataset:** `3.outdata/data/analysis_ready.csv` (or specify)
+**最终可分析数据集：** `3.outdata/data/analysis_ready.csv`（或另行指定）
 
 ---
 
-## 3. Variable Cleaning Tasks
+## 3. 变量清洗任务
 
-### 3.1 Variable Renaming
+### 3.1 变量重命名
 
-| Original name | New name | Source file | Reason |
+| 原名称 | 新名称 | 源文件 | 原因 |
 |---|---|---|---|
 | | | | |
 
-### 3.2 Type Conversions
+### 3.2 类型转换
 
-| Variable | Current type | Target type | Notes |
+| 变量 | 当前类型 | 目标类型 | 备注 |
 |---|---|---|---|
 | | | | |
 
-### 3.3 Date Parsing
+### 3.3 日期解析
 
-| Variable | Raw format | Target format | Example |
+| 变量 | 原始格式 | 目标格式 | 示例 |
 |---|---|---|---|
 | | | ISO 8601 (YYYY-MM-DD) | |
 
-### 3.4 Missing Value Coding
+### 3.4 缺失值编码
 
-| Variable | Current missing code | Standard missing code | Notes |
+| 变量 | 当前缺失码 | 标准缺失码 | 备注 |
 |---|---|---|---|
 | | e.g., -9, 99, "N/A" | `NA` / `.` | |
 
-### 3.5 Duplicate Checks
+### 3.5 重复检查
 
-| Level | ID variable(s) | Expected duplicates | Action if found |
+| 层级 | ID 变量 | 预期重复 | 发现后的处理 |
 |---|---|---|---|
 | | | | drop first / drop last / keep all and flag / stop |
 
-### 3.6 ID Consistency Checks
+### 3.6 ID 一致性检查
 
-| Files to compare | Shared ID variable | Expected match rate | Action if mismatch |
+| 待比较文件 | 共享 ID 变量 | 预期匹配率 | 不匹配时的处理 |
 |---|---|---|---|
 | | | | |
 
-### 3.7 Unit Harmonization
+### 3.7 单位统一
 
-| Variable | Current units | Target units | Conversion factor |
+| 变量 | 当前单位 | 目标单位 | 换算系数 |
 |---|---|---|---|
 | | | | |
 
-### 3.8 Winsorization / Outlier Flags (only if explicitly requested in study spec)
+### 3.8 缩尾 / 离群值标记（仅在研究规格说明中明确要求时）
 
-| Variable | Lower percentile | Upper percentile | Action: winsorize / flag only |
+| 变量 | 下分位数 | 上分位数 | 处理：winsorize / flag only |
 |---|---|---|---|
 | | | | |
 
-### 3.9 Reshaping
+### 3.9 重塑
 
-| File | Current shape | Target shape | ID variable | Time variable |
+| 文件 | 当前形态 | 目标形态 | ID 变量 | 时间变量 |
 |---|---|---|---|---|
 | | wide / long | wide / long | | |
 
 ---
 
-## 4. Sample Restrictions
+## 4. 样本限制条件
 
-List every filter that drops observations. Filters applied here must match `study_spec.md` §5 exactly.
+列出每一个会丢弃观测的过滤条件。此处应用的过滤条件必须与 `study_spec.md` §5 完全一致。
 
-| Filter | Condition | Expected obs dropped | Documented reason |
+| 过滤条件 | 条件表达式 | 预期丢弃观测数 | 记录的理由 |
 |---|---|---|---|
 | | | | |
 
-**Required: every dropped observation must be counted and logged.**
+**要求：每一条被丢弃的观测都必须被计数并记入日志。**
 
 ---
 
-## 5. Merge Tasks
+## 5. 合并任务
 
-Complete one row per merge operation, in execution order.
+按执行顺序，每个合并操作填写一行。
 
-| Step | Left file | Right file | Merge type | Merge keys | Expected match rate | Action if unmatched |
+| 步骤 | 左表文件 | 右表文件 | 合并类型 | 合并键 | 预期匹配率 | 未匹配时的处理 |
 |---|---|---|---|---|---|---|
 | 1 | | | `1:1` / `m:1` / `1:m` / `m:m` | | | keep / drop / flag |
 
-**If merge keys are ambiguous or unknown:** stop — do not guess. Document the issue and ask for clarification.
+**若合并键含糊或未知：** 停下——不要猜测。记录问题并请求澄清。
 
 ---
 
-## 6. Derived Variables
+## 6. 派生变量
 
-| Variable name | Formula / definition | Source variables | Rationale |
+| 变量名 | 公式 / 定义 | 源变量 | 理由 |
 |---|---|---|---|
 | | | | |
 
 ---
 
-## 7. Final Dataset Specification
+## 7. 最终数据集规格
 
-| Property | Value |
+| 属性 | 值 |
 |---|---|
-| File path | `3.outdata/data/` |
-| Unit of observation | |
-| Expected row count | |
-| Expected column count | |
-| ID variable | |
-| Time variable (if panel) | |
+| 文件路径 | `3.outdata/data/` |
+| 观测单位 | |
+| 预期行数 | |
+| 预期列数 | |
+| ID 变量 | |
+| 时间变量（若为面板） | |
 
 ---
 
-## 8. Open Questions Before Cleaning Starts
+## 8. 清洗开始前的待解问题
 
-List anything unresolved that would block or change the cleaning plan.
+列出任何会阻塞或改变清洗计划的未决事项。
 
-| Question | Severity | Status |
+| 问题 | 严重度 | 状态 |
 |---|---|---|
 | | `blocking` / `non-blocking` | open / resolved |

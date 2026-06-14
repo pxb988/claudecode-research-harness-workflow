@@ -1,123 +1,123 @@
-# Analysis Plan
+# 分析计划
 
-> This file is the task ledger. It tracks every analysis task, its definition of done, and the evidence paths.
-> Generated during `/research-harness-plan`. Updated by `/research-harness-work` as tasks complete.
-> Source of truth precedence: `study_spec.md` > `analysis_plan.md`.
-
----
-
-## Project
-
-- **Study spec path:** `study_spec.md`
-- **Analysis plan version:** 1
-- **Last updated:** YYYY-MM-DD
-- **Analyst:** Claude Code
+> 本文件是任务台账，追踪每个分析任务、它的完成定义以及证据路径。
+> 在 `/research-harness-plan` 期间生成。由 `/research-harness-work` 在任务完成时更新。
+> 真相来源优先级：`study_spec.md` > `analysis_plan.md`。
 
 ---
 
-## Stage 1 — Descriptive Analysis
+## 项目
 
-### Task 1.1: Summary statistics
-
-- **Script:** `0.dofiles/table_descriptive.R`
-- **Log:** `0.dofiles/logs/table_descriptive.log`
-- **Output:** `3.outdata/tables/table1_descriptive.csv`
-- **DoD:**
-  - [ ] Script runs without error
-  - [ ] Log file exists at the path above
-  - [ ] Output file exists and matches log
-  - [ ] Observation count matches `study_spec.md` sample restrictions
-- **Assumptions:** Sample restrictions applied per `study_spec.md` §5
-- **Unresolved questions:** none
-- **Status:** `cc:todo`
-
-### Task 1.2: [Add additional descriptive tasks]
-
-- **Script:** unknown
-- **Log:** unknown
-- **Output:** unknown
-- **DoD:**
-  - [ ] Script runs without error
-  - [ ] Log file exists
-  - [ ] Output matches log
-- **Status:** `cc:todo`
+- **研究规格说明路径：** `study_spec.md`
+- **分析计划版本：** 1
+- **最后更新：** YYYY-MM-DD
+- **分析者：** Claude Code
 
 ---
 
-## Stage 2 — Main Models
+## 阶段 1 — 描述性分析
 
-### Task 2.1: Main regression / estimator
+### 任务 1.1：汇总统计
 
-- **Script:** `0.dofiles/main_regression.R`
-- **Log:** `0.dofiles/logs/main_regression.log`
-- **Output:** `3.outdata/tables/table2_main.csv`
-- **Identification:** Per `study_spec.md` §2
-- **DoD:**
-  - [ ] Script runs without error
-  - [ ] Log file exists
-  - [ ] All reported coefficients traceable to log
-  - [ ] Identification assumption stated in script header
-- **Status:** `cc:todo`
+- **脚本：** `0.dofiles/table_descriptive.R`
+- **日志：** `0.dofiles/logs/table_descriptive.log`
+- **产出：** `3.outdata/tables/table1_descriptive.csv`
+- **完成定义：**
+  - [ ] 脚本运行无错误
+  - [ ] 日志文件存在于上述路径
+  - [ ] 产出文件存在且与日志一致
+  - [ ] 观测数与 `study_spec.md` 样本限制条件一致
+- **假设：** 样本限制条件按 `study_spec.md` §5 应用
+- **未决问题：** 无
+- **状态：** `cc:todo`
 
----
+### 任务 1.2：[补充其他描述性任务]
 
-## Stage 3 — Robustness Checks
-
-### Task 3.1: [Robustness check description]
-
-- **Script:** unknown
-- **Log:** unknown
-- **Output:** unknown
-- **DoD:**
-  - [ ] Script runs without error
-  - [ ] Log file exists
-  - [ ] Results compared to main specification
-- **Status:** `cc:todo`
+- **脚本：** unknown
+- **日志：** unknown
+- **产出：** unknown
+- **完成定义：**
+  - [ ] 脚本运行无错误
+  - [ ] 日志文件存在
+  - [ ] 产出与日志一致
+- **状态：** `cc:todo`
 
 ---
 
-## Stage 4 — Heterogeneity Analysis
+## 阶段 2 — 主模型
 
-### Task 4.1: [Subgroup or heterogeneity analysis]
+### 任务 2.1：主回归 / 估计量
 
-- **Script:** unknown
-- **Log:** unknown
-- **Output:** unknown
-- **DoD:**
-  - [ ] Script runs without error
-  - [ ] Log file exists
-  - [ ] Subgroup definitions documented in script
-- **Status:** `cc:todo`
-
----
-
-## Stage 5 — Figures
-
-### Task 5.1: [Figure description]
-
-- **Script:** unknown
-- **Log:** unknown
-- **Output:** `3.outdata/figures/figure1.pdf`
-- **DoD:**
-  - [ ] Script runs without error
-  - [ ] Log file exists
-  - [ ] Figure renders without error
-- **Status:** `cc:todo`
+- **脚本：** `0.dofiles/main_regression.R`
+- **日志：** `0.dofiles/logs/main_regression.log`
+- **产出：** `3.outdata/tables/table2_main.csv`
+- **识别：** 按 `study_spec.md` §2
+- **完成定义：**
+  - [ ] 脚本运行无错误
+  - [ ] 日志文件存在
+  - [ ] 所有报告的系数可追溯到日志
+  - [ ] 识别假设写入脚本头部
+- **状态：** `cc:todo`
 
 ---
 
-## Evidence Ledger
+## 阶段 3 — 稳健性检验
 
-After each task completes, the Analyst adds a row here.
+### 任务 3.1：[稳健性检验说明]
 
-| Task | Script | Log | Output | Verified | Date |
+- **脚本：** unknown
+- **日志：** unknown
+- **产出：** unknown
+- **完成定义：**
+  - [ ] 脚本运行无错误
+  - [ ] 日志文件存在
+  - [ ] 结果与主设定对比
+- **状态：** `cc:todo`
+
+---
+
+## 阶段 4 — 异质性分析
+
+### 任务 4.1：[分组或异质性分析]
+
+- **脚本：** unknown
+- **日志：** unknown
+- **产出：** unknown
+- **完成定义：**
+  - [ ] 脚本运行无错误
+  - [ ] 日志文件存在
+  - [ ] 分组定义记录在脚本中
+- **状态：** `cc:todo`
+
+---
+
+## 阶段 5 — 图形
+
+### 任务 5.1：[图形说明]
+
+- **脚本：** unknown
+- **日志：** unknown
+- **产出：** `3.outdata/figures/figure1.pdf`
+- **完成定义：**
+  - [ ] 脚本运行无错误
+  - [ ] 日志文件存在
+  - [ ] 图形渲染无错误
+- **状态：** `cc:todo`
+
+---
+
+## 证据台账
+
+每个任务完成后，分析者在此添加一行。
+
+| 任务 | 脚本 | 日志 | 产出 | 已验证 | 日期 |
 |---|---|---|---|---|---|
 | 1.1 | | | | | |
 
 ---
 
-## Blocked and Infeasible Tasks
+## 受阻与不可行任务
 
-| Task | Reason | Date flagged |
+| 任务 | 原因 | 标记日期 |
 |---|---|---|
 | | | |

@@ -100,16 +100,16 @@ If `analysis_plan.md` already exists: do not overwrite. Notify the user.
 Print a setup summary:
 
 ```
-Research Agent Harness — Setup Complete
+Research Agent Harness — 初始化完成
 
-Study spec:     study_spec.md         [created / already existed]
-Analysis plan:  analysis_plan.md      [created / already existed]
-Folders:        0.dofiles, 0.dofiles/logs, 1.rawdata,
-                2.workdata, 3.outdata/data, 3.outdata/figures,
-                3.outdata/tables, 4.reports
-Data protection: 1.rawdata/READONLY.md written, OS lock applied
+研究规格：  study_spec.md         [created / already existed]
+分析计划：  analysis_plan.md      [created / already existed]
+目录：      0.dofiles, 0.dofiles/logs, 1.rawdata,
+            2.workdata, 3.outdata/data, 3.outdata/figures,
+            3.outdata/tables, 4.reports
+数据保护：  已写入 1.rawdata/READONLY.md，已施加操作系统层只读锁
 
-Next step: Fill in study_spec.md, then run /research-harness-audit
+下一步：填写 study_spec.md，然后运行 /research-harness-audit
 ```
 
 ## Forbidden Actions
@@ -133,5 +133,5 @@ Next step: Fill in study_spec.md, then run /research-harness-audit
 
 Tell the user:
 
-> Fill in the remaining fields in `study_spec.md` — particularly identification strategy, variables, and sample restrictions — before running `/research-harness-audit`.
-> When `study_spec.md` is complete and you have approved it, run `/research-harness-audit`.
+> 在运行 `/research-harness-audit` 之前，先填完 `study_spec.md` 的剩余字段 —— 尤其是识别策略、变量与样本限制条件。
+> 当 `study_spec.md` 填写完整并经你批准后，运行 `/research-harness-audit`。

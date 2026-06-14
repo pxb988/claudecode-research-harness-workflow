@@ -156,8 +156,8 @@ Save `0.dofiles/logs/audit_YYYYMMDD.log`.
 
 Tell the user:
 
-> Audit complete. Review `4.reports/data_audit_report.md`.
+> 审计完成。检查 `4.reports/data_audit_report.md`。
 >
-> If the feasibility verdict is `infeasible`: revise `study_spec.md` before continuing.
+> 若可行性结论为 `infeasible`：在继续之前先修订 `study_spec.md`。
 >
-> If `feasible` or `partially feasible`: fill in `${CLAUDE_PLUGIN_ROOT}/templates/data_cleaning_plan.md`, save it as `4.reports/data_cleaning_plan.md`, review it, then run `/research-harness-clean`.
+> 若为 `feasible` 或 `partially feasible`：填写 `${CLAUDE_PLUGIN_ROOT}/templates/data_cleaning_plan.md`，另存为 `4.reports/data_cleaning_plan.md`，检查后再运行 `/research-harness-clean`。
