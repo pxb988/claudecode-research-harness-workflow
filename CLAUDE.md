@@ -35,6 +35,13 @@ same names. Never hardcode a divergent layout in a skill.
   and published paper numbers only — never a specific run's achieved values or private paths.
 - **Hooks are TDD:** change a hook only with a failing test first; run `bash hooks/test/run-all.sh` before committing.
 - **Tests for knowledge too:** `node docs/references/test-index-resolve.js` must pass after touching the reference layer.
+- **Generated artifacts are Simplified Chinese:** what the workflow *generates* into a
+  user project — templates, embedded script comments/log strings, skill summary/handoff
+  blocks, example fixtures — is Chinese. Code identifiers, paths, and the sentinel/enum
+  tokens that skill logic and tests match literally (`unknown`, `cc:*`, `feasible`/`infeasible`,
+  `APPROVE`/`REQUEST_CHANGES`, `PASS`/`FAIL`, merge types, DiD/IV/RD) stay English — translating
+  them breaks matching. Skill *procedure prose* and frontmatter stay English. Canonical
+  boundary: `templates/project/CLAUDE.md` §2「语言约定」.
 - **Commits:** Chinese, `<type>(scope): <summary>`; plain enough for a non-engineer to read.
 
 ## What not to touch without explicit confirmation
